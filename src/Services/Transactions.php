@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Services;
 use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Responses\Contracts\ChargeResponse;
 use HDSSolutions\Bancard\Responses\Contracts\ConfirmationResponse;
+use HDSSolutions\Bancard\Responses\Contracts\PreauthorizationConfirmResponse;
 use HDSSolutions\Bancard\Responses\Contracts\RollbackResponse;
 
 trait Transactions {
@@ -36,6 +37,21 @@ trait Transactions {
     public static function confirmation(int $shop_process_id): ConfirmationResponse {
         // get a new Confirmation request
         $request = self::newConfirmationRequest($shop_process_id);
+        // execute request
+        $request->execute();
+
+        // return request response
+        return $request->getResponse();
+    }
+
+    /**
+     * @param  int  $shop_process_id
+     *
+     * @return PreauthorizationConfirmResponse
+     */
+    public static function preauthorizationConfirm(int $shop_process_id): PreauthorizationConfirmResponse {
+        // get a new PreauthorizationConfirm request
+        $request = self::newPreauthorizationConfirmRequest($shop_process_id);
         // execute request
         $request->execute();
 

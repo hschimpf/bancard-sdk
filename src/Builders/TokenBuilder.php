@@ -7,6 +7,7 @@ use HDSSolutions\Bancard\Requests\Contracts\ConfirmationRequest;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\Contracts\ChargeRequest;
+use HDSSolutions\Bancard\Requests\Contracts\PreauthorizationConfirmRequest;
 use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
 use HDSSolutions\Bancard\Requests\Contracts\RollbackRequest;
 use HDSSolutions\Bancard\Requests\Contracts\UsersCardsRequest;
@@ -37,6 +38,15 @@ final class TokenBuilder {
             Bancard::getPrivateKey(),
             $request->shop_process_id,
             'get_confirmation',
+        ));
+    }
+
+    private static function preauthorizations_confirm(PreauthorizationConfirmRequest $request): string {
+        // return a token for Confirmation request
+        return md5(sprintf('%s%u%s',
+            Bancard::getPrivateKey(),
+            $request->shop_process_id,
+            'pre-authorization-confirm',
         ));
     }
 

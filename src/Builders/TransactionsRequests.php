@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Builders;
 use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Requests\ChargeRequest;
 use HDSSolutions\Bancard\Requests\ConfirmationRequest;
+use HDSSolutions\Bancard\Requests\PreauthorizationConfirmRequest;
 use HDSSolutions\Bancard\Requests\RollbackRequest;
 
 trait TransactionsRequests {
@@ -17,6 +18,11 @@ trait TransactionsRequests {
     public static function newConfirmationRequest(int $shop_process_id): ConfirmationRequest {
         // return the request
         return new ConfirmationRequest(self::instance(), $shop_process_id);
+    }
+
+    public static function newPreauthorizationConfirmRequest(int $shop_process_id): PreauthorizationConfirmRequest {
+        // return the request
+        return new PreauthorizationConfirmRequest(self::instance(), $shop_process_id);
     }
 
     public static function newRollbackRequest(int $shop_process_id): RollbackRequest {
