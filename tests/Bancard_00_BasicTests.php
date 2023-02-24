@@ -35,7 +35,7 @@ final class Bancard_00_BasicTests extends TestCase {
 
     public function testInvalidDataRequest(): void {
         $single_buy = Bancard::single_buy(
-            shop_process_id: random_int(10000, 99999),
+            shop_process_id: random_int(8**16, PHP_INT_MAX),
             amount:          -10,
             description:     'Test invalid amount',
             currency:        Currency::Dollar,

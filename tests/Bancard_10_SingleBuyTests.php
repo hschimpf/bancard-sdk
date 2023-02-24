@@ -16,8 +16,8 @@ final class Bancard_10_SingleBuyTests extends TestCase {
      */
     public function testSingleBuyRequest(): void {
         $this->assertInstanceOf(SingleBuyResponse::class, $single_buy = Bancard::single_buy(
-            shop_process_id: random_int(10000, 99999),
-            amount:          15000,
+            shop_process_id: random_int(8**16, PHP_INT_MAX),
+            amount:          random_int(5, 20) * 1000,
             description:     'Test',
             currency:        Currency::Guarani,
             return_url:      'https://localhost?success',
@@ -32,8 +32,8 @@ final class Bancard_10_SingleBuyTests extends TestCase {
      */
     public function testBuildCustomSingleBuyRequest(): SingleBuyRequest {
         $request = Bancard::newSingleBuyRequest(
-            shop_process_id: random_int(10000, 99999),
-            amount:          15000,
+            shop_process_id: random_int(8**16, PHP_INT_MAX),
+            amount:          random_int(5, 20) * 1000,
             description:     'Test',
             currency:        Currency::Guarani,
         );
