@@ -1,0 +1,24 @@
+{
+    "name": "hds-solutions/bancard-sdk",
+    "description": "Bancard SDK library",
+    "type": "library",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Hermann D. Schimpf",
+            "email": "hhschimpf@hds-solutions.net"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    }
+}
