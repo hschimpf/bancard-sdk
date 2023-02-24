@@ -55,7 +55,7 @@ abstract class BancardRequest implements Contracts\BancardRequest {
     }
 
     public function __set(string $name, $value): void {
-        if ( !method_exists($this, $method = Str::camel(sprintf('set_%s', $name)))) {
+        if ( !method_exists($this, $method = $this->strCamel(sprintf('set_%s', $name)))) {
             throw new RuntimeException(sprintf('The attribute [%s] does not exist for class [%s].',
                 $name, self::class));
         }
@@ -65,7 +65,7 @@ abstract class BancardRequest implements Contracts\BancardRequest {
     }
 
     public function __get(string $name) {
-        if ( !method_exists($this, $method = Str::camel(sprintf('get_%s', $name)))) {
+        if ( !method_exists($this, $method = $this->strCamel(sprintf('get_%s', $name)))) {
             throw new RuntimeException(sprintf('The attribute [%s] does not exist for class [%s].',
                 $name, self::class));
         }
@@ -76,9 +76,24 @@ abstract class BancardRequest implements Contracts\BancardRequest {
 
     public function __isset(string $name): bool {
         // return true if attribute getter exists
-        return method_exists($this, $method = Str::camel(sprintf('get_%s', $name)))
+        return method_exists($this, $method = $this->strCamel(sprintf('get_%s', $name)))
             // and has value (? maybe)
             && $this->$method() !== null;
+    }
+
+    /**
+     * Simplified version of Illuminate\Support\Str::camel()
+     *
+     * @param  string  $value
+     *
+     * @return string
+     */
+    private function strCamel(string $value): string {
+        $words = explode(' ', str_replace(['-', '_'], ' ', $value));
+        $studlyWords = array_map('ucfirst', $words);
+        $studly = implode($studlyWords);
+
+        return lcfirst($studly);
     }
 
 }
