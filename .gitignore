@@ -1,2 +1,7 @@
+/logs/
 /vendor/
+/.idea/
+/.vscode/
+
 composer.lock
+*.cache
