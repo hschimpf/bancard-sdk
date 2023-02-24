@@ -4,7 +4,7 @@ namespace HDSSolutions\Bancard\Responses\Contracts;
 
 use HDSSolutions\Bancard\Models\Card;
 
-interface UsersCardsResponse {
+interface UsersCardsResponse extends BancardResponse {
 
     /**
      * @return Card[] Returns the registered cards of the User

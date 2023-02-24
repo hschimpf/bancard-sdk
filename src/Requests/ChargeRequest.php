@@ -27,6 +27,7 @@ final class ChargeRequest extends Base\BancardRequest implements Contracts\Charg
      * @param  int  $shop_process_id
      * @param  float  $amount
      * @param  string  $currency
+     * @param  string  $description
      */
     public function __construct(
         Bancard $bancard,
