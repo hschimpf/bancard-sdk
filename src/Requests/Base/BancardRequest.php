@@ -28,7 +28,7 @@ abstract class BancardRequest implements Contracts\BancardRequest {
         return $this->getResponse()?->wasSuccess() ?? false;
     }
 
-    final public function getResponse(): ?BancardResponse {
+    final public function getResponse(): mixed {
         return $this->response;
     }
 

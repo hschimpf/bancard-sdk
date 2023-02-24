@@ -4,7 +4,7 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\Payment;
+use HDSSolutions\Bancard\Models\X\Contracts\Payment;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 use HDSSolutions\Bancard\Responses\SingleBuyResponse;
 

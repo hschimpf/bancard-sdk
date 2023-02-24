@@ -4,7 +4,7 @@ namespace HDSSolutions\Bancard\Responses;
 
 final class SingleBuyResponse extends Base\BancardResponse implements Contracts\SingleBuyResponse {
 
-    public function __construct(
+    private function __construct(
         private ?string $process_id,
     ) {}
 

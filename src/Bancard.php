@@ -87,7 +87,7 @@ final class Bancard {
      * Stores the credentials to use for communication with Bancard services
      *
      * @param  ?string  $publicKey  Public Key.
-     * @param  ?string  $privateKey  Privated Key
+     * @param  ?string  $privateKey  Private Key
      */
     public static function credentials(?string $publicKey, ?string $privateKey): void {
         self::$PUBLIC_KEY = $publicKey;

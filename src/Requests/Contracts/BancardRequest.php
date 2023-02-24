@@ -4,6 +4,9 @@ namespace HDSSolutions\Bancard\Requests\Contracts;
 
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 
+/**
+ * @template TResponse of BancardResponse
+ */
 interface BancardRequest {
 
     /**
@@ -27,8 +30,8 @@ interface BancardRequest {
     public function getOperation(): array;
 
     /**
-     * @return BancardResponse|null Bancard response of the request
+     * @return TResponse|null Bancard response of the request
      */
-    public function getResponse(): ?BancardResponse;
+    public function getResponse(): mixed;
 
 }
