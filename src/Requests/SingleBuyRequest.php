@@ -11,6 +11,11 @@ use HDSSolutions\Bancard\Responses\SingleBuyResponse;
 final class SingleBuyRequest extends Base\BancardRequest implements Contracts\SingleBuyRequest {
 
     /**
+     * @var bool Flag to make request as Zimple
+     */
+    private bool $zimple = false;
+
+    /**
      * @var string|null Additional data to send to Bancard service
      */
     private ?string $additional_data = null;
@@ -39,7 +44,7 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
     }
 
     public function getOperation(): array {
-        return [
+        return array_merge([
             'token'           => $this->getToken(),
             'shop_process_id' => $this->getShopProcessId(),
             'currency'        => $this->getCurrency(),
@@ -48,7 +53,9 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
             'additional_data' => $this->getAdditionalData(),
             'return_url'      => $this->getReturnUrl(),
             'cancel_url'      => $this->getCancelUrl(),
-        ];
+        ], $this->zimple ? [
+            'zimple'          => true,
+        ] : []);
     }
 
     protected function buildResponse(Response $response): BancardResponse {
@@ -98,6 +105,10 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
 
     public function getCancelUrl(): ?string {
         return $this->cancel_url;
+    }
+
+    public function enableZimple(bool $zimple = true): bool {
+        return $this->zimple = $zimple;
     }
 
 }

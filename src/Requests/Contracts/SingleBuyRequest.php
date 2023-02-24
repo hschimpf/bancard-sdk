@@ -38,4 +38,6 @@ interface SingleBuyRequest extends BancardRequest {
 
     public function getCancelUrl(): ?string;
 
+    public function enableZimple(bool $zimple = true): bool;
+
 }
