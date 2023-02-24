@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Services;
 use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Responses\Contracts\ChargeResponse;
 use HDSSolutions\Bancard\Responses\Contracts\ConfirmationResponse;
+use HDSSolutions\Bancard\Responses\Contracts\RollbackResponse;
 
 trait Transactions {
 
@@ -35,6 +36,21 @@ trait Transactions {
     public static function confirmation(int $shop_process_id): ConfirmationResponse {
         // get a new Confirmation request
         $request = self::newConfirmationRequest($shop_process_id);
+        // execute request
+        $request->execute();
+
+        // return request response
+        return $request->getResponse();
+    }
+
+    /**
+     * @param  int  $shop_process_id
+     *
+     * @return RollbackResponse
+     */
+    public static function rollback(int $shop_process_id): RollbackResponse {
+        // get a new Rollback request
+        $request = self::newRollbackRequest($shop_process_id);
         // execute request
         $request->execute();
 

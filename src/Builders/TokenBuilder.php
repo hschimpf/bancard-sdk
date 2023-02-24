@@ -8,6 +8,7 @@ use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\Contracts\ChargeRequest;
 use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
+use HDSSolutions\Bancard\Requests\Contracts\RollbackRequest;
 use HDSSolutions\Bancard\Requests\Contracts\UsersCardsRequest;
 
 final class TokenBuilder {
@@ -36,6 +37,16 @@ final class TokenBuilder {
             Bancard::getPrivateKey(),
             $request->shop_process_id,
             'get_confirmation',
+        ));
+    }
+
+    private static function single_buy_rollback(RollbackRequest $request): string {
+        // return a token for Rollback request
+        return md5(sprintf('%s%u%s%0.2F',
+            Bancard::getPrivateKey(),
+            $request->shop_process_id,
+            'rollback',
+            0,
         ));
     }
 
