@@ -4,7 +4,7 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\X\Contracts\Card;
+use HDSSolutions\Bancard\Models\X\Contracts\PendingCard;
 use HDSSolutions\Bancard\Responses\CardsNewResponse;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 
@@ -12,12 +12,12 @@ final class CardsNewRequest extends Base\BancardRequest implements Contracts\Car
 
     /**
      * @param  Bancard  $bancard
-     * @param  Card  $card
+     * @param  PendingCard  $card
      * @param  string|null  $return_url
      */
     public function __construct(
         Bancard $bancard,
-        private Card $card,
+        private PendingCard $card,
         private ?string $return_url = null,
     ) {
         parent::__construct($bancard);

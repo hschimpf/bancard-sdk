@@ -2,6 +2,6 @@
 
 namespace HDSSolutions\Bancard\Models\X\Contracts;
 
-interface Card {
+interface PendingCard {
 
 }

@@ -3,6 +3,7 @@
 namespace HDSSolutions\Bancard\Builders;
 
 use HDSSolutions\Bancard\Models\Card;
+use HDSSolutions\Bancard\Models\PendingCard;
 use HDSSolutions\Bancard\Requests\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\UsersCardsRequest;
 
@@ -10,7 +11,7 @@ trait CardsRequests {
 
     public static function newCardsNewRequest(int $user_id, int $card_id, string $phone_no, string $email, ?string $return_url = null): CardsNewRequest {
         // build a pending card resource
-        $card = new Card([
+        $card = new PendingCard([
             'user_id'  => $user_id,
             'card_id'  => $card_id,
             'phone_no' => $phone_no,
