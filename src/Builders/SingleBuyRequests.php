@@ -7,12 +7,12 @@ use HDSSolutions\Bancard\Requests\SingleBuyRequest;
 
 trait SingleBuyRequests {
 
-    private function newSingleBuyRequest(float $amount, string $descripcion, ?string $currency = null): SingleBuyRequest {
+    public static function newSingleBuyRequest(int $shop_process_id, float $amount, string $description, string $currency, ?string $return_url = null, ?string $cancel_url = null): SingleBuyRequest {
         // build a pending payment resource
-        $payment = Payment::newSingleBuy($amount, $descripcion, $currency);
+        $payment = Payment::newSingleBuy($shop_process_id, $amount, $description, $currency);
 
         // return the request for the payment
-        return new SingleBuyRequest($payment);
+        return new SingleBuyRequest(self::instance(), $payment, $return_url, $cancel_url);
     }
 
 }

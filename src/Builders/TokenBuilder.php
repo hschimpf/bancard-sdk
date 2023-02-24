@@ -15,7 +15,7 @@ final class TokenBuilder {
         // return a token for
         return md5(sprintf("%s%u%.2F%s",
             Bancard::getPrivateKey(),
-            $payment->getKey(),
+            $payment->shop_process_id,
             $payment->amount,
             $payment->currency,
         ));

@@ -2,7 +2,16 @@
 
 namespace HDSSolutions\Bancard\Requests\Contracts;
 
-interface SingleBuyRequest {
+/**
+ * @property int $shop_process_id
+ * @property string $currency
+ * @property float $amount
+ * @property string $description
+ * @property string $additional_data
+ * @property string $return_url
+ * @property string $cancel_url
+ */
+interface SingleBuyRequest extends BancardRequest {
 
     /**
      * @return string Token of the Process

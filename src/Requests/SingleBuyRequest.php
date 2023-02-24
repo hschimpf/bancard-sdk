@@ -2,12 +2,12 @@
 
 namespace HDSSolutions\Bancard\Requests;
 
+use GuzzleHttp\Psr7\Response;
+use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Payment;
+use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
+use HDSSolutions\Bancard\Responses\SingleBuyResponse;
 
-/**
- * @property string $token
- * @property int $shop_process_id
- */
 final class SingleBuyRequest extends Base\BancardRequest implements Contracts\SingleBuyRequest {
 
     /**
@@ -16,22 +16,34 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
     private ?string $additional_data = null;
 
     /**
+     * @param  Bancard  $bancard
      * @param  Payment  $payment
      * @param  string|null  $return_url
      * @param  string|null  $cancel_url
      */
     public function __construct(
+        Bancard $bancard,
         private Payment $payment,
         private ?string $return_url = null,
         private ?string $cancel_url = null,
-    ) {}
+    ) {
+        parent::__construct($bancard);
+    }
+
+    public function getMethod(): string {
+        return 'POST';
+    }
+
+    public function getEndpoint(): string {
+        return 'single_buy';
+    }
 
     public function getOperation(): array {
         return [
             'token'           => $this->getToken(),
             'shop_process_id' => $this->getShopProcessId(),
             'currency'        => $this->getCurrency(),
-            'amount'          => number_format($this->getAmount(), 2),
+            'amount'          => number_format($this->getAmount(), 2, '.', ''),
             'description'     => $this->getDescription(),
             'additional_data' => $this->getAdditionalData(),
             'return_url'      => $this->getReturnUrl(),
@@ -39,12 +51,17 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
         ];
     }
 
+    protected function buildResponse(Response $response): BancardResponse {
+        // return parsed response
+        return SingleBuyResponse::fromGuzzle($response);
+    }
+
     public function getToken(): string {
         return $this->payment->token;
     }
 
     public function getShopProcessId(): int {
-        return $this->payment->id;
+        return $this->payment->shop_process_id;
     }
 
     public function getCurrency(): string {

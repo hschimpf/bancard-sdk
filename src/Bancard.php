@@ -33,14 +33,14 @@ final class Bancard {
     private static bool $DEV_ENV = true;
 
     /**
-     * @var string|null Private Key for building tokens
-     */
-    private static ?string $PRIVATE_KEY = null;
-
-    /**
      * @var string|null Public Key for communication
      */
     private static ?string $PUBLIC_KEY = null;
+
+    /**
+     * @var string|null Private Key for building tokens
+     */
+    private static ?string $PRIVATE_KEY = null;
 
     /**
      * @var Client HTTP Client to Bancard services
@@ -49,9 +49,22 @@ final class Bancard {
 
     private function __construct() {
         // init HTTP client
-        $this->client = new Client([ 'base_uri' => self::$DEV_ENV ? self::URI_Production : self::URI_Staging ]);
+        $this->client = new Client([
+            'base_uri' => self::isProduction()
+                ? self::URI_Production
+                : self::URI_Staging
+        ]);
         // init services
         $this->HasServices_init();
+    }
+
+    /**
+     * Returns the registered Public Key
+     *
+     * @return string Public Key
+     */
+    public static function getPublicKey(): string {
+        return self::$PUBLIC_KEY;
     }
 
     /**
@@ -73,12 +86,12 @@ final class Bancard {
     /**
      * Stores the credentials to use for communication with Bancard services
      *
-     * @param  ?string  $privateKey  Privated Key
      * @param  ?string  $publicKey  Public Key.
+     * @param  ?string  $privateKey  Privated Key
      */
-    public static function credentials(?string $privateKey, ?string $publicKey): void {
-        self::$PRIVATE_KEY = $privateKey;
+    public static function credentials(?string $publicKey, ?string $privateKey): void {
         self::$PUBLIC_KEY = $publicKey;
+        self::$PRIVATE_KEY = $privateKey;
     }
 
     public static function useDevelop(bool $develop = true): void {
