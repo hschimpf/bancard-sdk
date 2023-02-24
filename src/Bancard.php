@@ -3,8 +3,11 @@
 namespace HDSSolutions\Bancard;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use HDSSolutions\Bancard\Traits\BuildsRequests;
 use HDSSolutions\Bancard\Traits\HasServices;
+use Psr\Http\Message\RequestInterface;
 
 final class Bancard {
     use HasServices {
@@ -47,15 +50,32 @@ final class Bancard {
      */
     private Client $client;
 
+    /**
+     * @var RequestInterface|null Latest request sent
+     */
+    private ?RequestInterface $latest_request = null;
+
     private function __construct() {
         // init HTTP client
         $this->client = new Client([
-            'base_uri' => self::isProduction()
-                ? self::URI_Production
-                : self::URI_Staging
-        ]);
+           'base_uri' => self::isProduction()
+               ? self::URI_Production
+               : self::URI_Staging,
+           'handler'  => $stack = HandlerStack::create(),
+       ]);
+        // add a middleware to capture requests sent body
+        $stack->push(Middleware::mapRequest(function(RequestInterface $request) {
+            // store request made
+            $this->latest_request = $request;
+
+            return $request;
+        }));
         // init services
         $this->HasServices_init();
+    }
+
+    public function getLatestRequest(): ?RequestInterface {
+        return $this->latest_request;
     }
 
     /**

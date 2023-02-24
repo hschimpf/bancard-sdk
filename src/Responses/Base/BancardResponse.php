@@ -8,6 +8,7 @@ use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Responses\Contracts;
 use HDSSolutions\Bancard\Responses\Structs\BancardMessage;
 use JsonException;
+use Psr\Http\Message\StreamInterface;
 
 abstract class BancardResponse implements Contracts\BancardResponse {
 
@@ -68,6 +69,11 @@ abstract class BancardResponse implements Contracts\BancardResponse {
 
         // return response instance
         return $instance;
+    }
+
+    final public function getBody(): StreamInterface {
+        $this->response->getBody()->rewind();
+        return $this->response->getBody();
     }
 
     final public function getRequest(): mixed {
