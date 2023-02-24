@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Builders;
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
+use HDSSolutions\Bancard\Requests\Contracts\ChargeRequest;
 use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
 use HDSSolutions\Bancard\Requests\Contracts\UsersCardsRequest;
 
@@ -44,6 +45,18 @@ final class TokenBuilder {
             Bancard::getPrivateKey(),
             $request->user_id,
             'request_user_cards',
+        ));
+    }
+
+    private static function charge(ChargeRequest $request): string {
+        // return a token for Charge request
+        return md5(sprintf('%s%u%s%.2F%s%s',
+            Bancard::getPrivateKey(),
+            $request->shop_process_id,
+            'charge',
+            $request->amount,
+            $request->currency,
+            $request->card->alias_token,
         ));
     }
 

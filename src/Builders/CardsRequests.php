@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Builders;
 use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Models\PendingCard;
 use HDSSolutions\Bancard\Requests\CardsNewRequest;
+use HDSSolutions\Bancard\Requests\ChargeRequest;
 use HDSSolutions\Bancard\Requests\UsersCardsRequest;
 
 trait CardsRequests {
@@ -25,6 +26,11 @@ trait CardsRequests {
     public static function newUsersCardsRequest(int $user_id): UsersCardsRequest {
         // return the request
         return new UsersCardsRequest(self::instance(), $user_id);
+    }
+
+    public static function newChargeRequest(Card $card, int $shop_process_id, float $amount, string $currency, string $description): ChargeRequest {
+        // return the request
+        return new ChargeRequest(self::instance(), $card, $shop_process_id, $amount, $currency, $description);
     }
 
 }
