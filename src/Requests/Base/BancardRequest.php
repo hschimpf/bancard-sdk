@@ -6,7 +6,6 @@ use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Requests\Contracts;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
-use Illuminate\Support\Str;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
