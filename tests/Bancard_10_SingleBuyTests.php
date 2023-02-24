@@ -15,7 +15,7 @@ final class Bancard_10_SingleBuyTests extends TestCase {
      * @throws Exception
      */
     public function testSingleBuyRequest(): void {
-        $this->assertInstanceOf(SingleBuyResponse::class, $single_buy = Bancard::single_buy(
+        $this->assertInstanceOf(SingleBuyResponse::class, $response = Bancard::single_buy(
             shop_process_id: random_int(8**16, PHP_INT_MAX),
             amount:          random_int(5, 20) * 1000,
             description:     'Test',
@@ -23,8 +23,8 @@ final class Bancard_10_SingleBuyTests extends TestCase {
             return_url:      'https://localhost?success',
             cancel_url:      'https://localhost?cancelled',
         ));
-        $this->assertTrue($single_buy->wasSuccess(), $single_buy->getMessages()[0]->description ?? 'Unknown');
-        $this->assertNotEmpty($single_buy->getProcessId());
+        $this->assertTrue($response->wasSuccess(), $response->getMessages()[0]->description ?? 'Unknown');
+        $this->assertNotEmpty($response->getProcessId());
     }
 
     /**
@@ -64,6 +64,7 @@ final class Bancard_10_SingleBuyTests extends TestCase {
         $this->assertTrue($request->execute());
         $this->assertInstanceOf(SingleBuyResponse::class, $response = $request->getResponse());
         $this->assertSame(200, $response->getStatusCode());
+        $this->assertNotEmpty($response->getProcessId());
     }
 
 }
