@@ -33,7 +33,7 @@ trait BuildsRequests {
                     // get operation params
                     'operation' => array_merge(
                         // add token for the operation
-                        [ 'token' => $request->getToken() ],
+                        [ 'token' => Builders\TokenBuilder::for($request) ],
                         // add request operation info
                         $request->getOperation(),
                     ),

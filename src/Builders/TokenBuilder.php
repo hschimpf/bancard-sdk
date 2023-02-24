@@ -9,7 +9,11 @@ use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
 final class TokenBuilder {
 
     public static function for(BancardRequest $request): string {
-        return self::{$request->getEndpoint()}($request);
+        // sanitize endpoint name
+        $method = str_replace('/', '_', $request->getEndpoint());
+
+        // return token for method
+        return self::$method($request);
     }
 
     private static function single_buy(SingleBuyRequest $request): string {

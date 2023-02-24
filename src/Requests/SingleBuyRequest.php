@@ -4,7 +4,6 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Builders\TokenBuilder;
 use HDSSolutions\Bancard\Models\Payment;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 use HDSSolutions\Bancard\Responses\SingleBuyResponse;
@@ -61,10 +60,6 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
     protected function buildResponse(Response $response): BancardResponse {
         // return parsed response
         return SingleBuyResponse::fromGuzzle($response);
-    }
-
-    public function getToken(): string {
-        return TokenBuilder::for($this);
     }
 
     public function getShopProcessId(): int {

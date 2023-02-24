@@ -7,11 +7,6 @@ use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 interface BancardRequest {
 
     /**
-     * @return string Token of the Process
-     */
-    public function getToken(): string;
-
-    /**
      * @return bool True if request execution succeeded
      */
     public function execute(): bool;
