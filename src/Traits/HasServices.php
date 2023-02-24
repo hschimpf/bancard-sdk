@@ -6,6 +6,7 @@ use HDSSolutions\Bancard\Services;
 
 trait HasServices {
     use Services\SingleBuy;
+    use Services\Cards;
 
     private function init(): void {}
 
