@@ -3,6 +3,7 @@
 namespace HDSSolutions\Bancard\Services;
 
 use HDSSolutions\Bancard\Responses\CardsNewResponse;
+use HDSSolutions\Bancard\Responses\UsersCardsResponse;
 
 trait Cards {
 
@@ -18,6 +19,21 @@ trait Cards {
     public static function card_new(int $user_id, int $card_id, string $phone_no, string $email, ?string $return_url = null): ?CardsNewResponse {
         // get a CardsNew request
         $request = self::newCardsNewRequest($user_id, $card_id, $phone_no, $email, $return_url);
+        // execute request
+        $request->execute();
+
+        // return request response
+        return $request->getResponse();
+    }
+
+    /**
+     * @param  int  $user_id
+     *
+     * @return UsersCardsResponse|null
+     */
+    public static function users_cards(int $user_id): ?UsersCardsResponse {
+        // get a UserCards request
+        $request = self::newUsersCardsRequest($user_id);
         // execute request
         $request->execute();
 
