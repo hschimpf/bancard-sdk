@@ -2,6 +2,7 @@
 
 namespace HDSSolutions\Bancard\Tests;
 
+use Dotenv\Dotenv;
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Currency;
 use PHPUnit\Framework\TestCase;
@@ -14,11 +15,14 @@ final class Bancard_00_BasicTests extends TestCase {
     }
 
     public function testThatCredentialsCanBeSet(): void {
+        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv->load();
+
         Bancard::credentials(
-            publicKey: BANCARD_PUBLIC_KEY,
-            privateKey: BANCARD_PRIVATE_KEY,
+            publicKey:  getenv('BANCARD_PUBLIC_KEY'),
+            privateKey: getenv('BANCARD_PRIVATE_KEY'),
         );
-        $this->assertSame(Bancard::getPrivateKey(), BANCARD_PRIVATE_KEY);
+        $this->assertSame(Bancard::getPrivateKey(), getenv('BANCARD_PRIVATE_KEY'));
     }
 
     public function testInvalidDataValidations(): void {
