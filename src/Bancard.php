@@ -99,7 +99,7 @@ final class Bancard {
     /**
      * @return self Returns singleton instance
      */
-    private static function instance(): self {
+    protected static function instance(): self {
         return self::$singleton ??= new self();
     }
 

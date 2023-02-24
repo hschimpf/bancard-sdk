@@ -13,6 +13,7 @@ use RuntimeException;
 trait BuildsRequests {
     use Builders\SingleBuyRequests;
     use Builders\CardsRequests;
+    use Builders\TransactionsRequests;
 
     /**
      * Sends the request to Bancard and returns the response

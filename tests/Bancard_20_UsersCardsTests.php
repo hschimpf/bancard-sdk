@@ -5,7 +5,10 @@ namespace HDSSolutions\Bancard\Tests;
 use Exception;
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Card;
+use HDSSolutions\Bancard\Models\Confirmation;
 use HDSSolutions\Bancard\Models\Currency;
+use HDSSolutions\Bancard\Requests\ChargeRequest;
+use HDSSolutions\Bancard\Responses\Contracts\ConfirmationResponse;
 use HDSSolutions\Bancard\Responses\Contracts\UsersCardsResponse;
 use HDSSolutions\Bancard\Responses\Contracts\ChargeResponse;
 use PHPUnit\Framework\TestCase;
@@ -27,9 +30,13 @@ final class Bancard_20_UsersCardsTests extends TestCase {
 
     /**
      * @depends testUserCardsRequest
+     *
+     * @param  Card  $card
+     *
+     * @return ChargeRequest
      * @throws Exception
      */
-    public function testChargeRequest(Card $card): void {
+    public function testChargeRequest(Card $card): ChargeRequest {
         $this->assertInstanceOf(ChargeResponse::class, $response = Bancard::charge(
             card:            $card,
             shop_process_id: random_int(8**4, 8**8),
@@ -38,6 +45,22 @@ final class Bancard_20_UsersCardsTests extends TestCase {
             description:     'Test',
         ));
         $this->assertTrue($response->wasSuccess(), $response->getMessages()[0]->description ?? 'Unknown');
+        $this->assertInstanceOf(Confirmation::class, $response->getConfirmation());
+
+        return $response->getRequest();
+    }
+
+    /**
+     * @depends testChargeRequest
+     *
+     * @param  ChargeRequest  $chargeRequest
+     */
+    public function testConfirmationRequest(ChargeRequest $chargeRequest): void {
+        $this->assertInstanceOf(ConfirmationResponse::class, $response = Bancard::confirmation(
+            shop_process_id: $chargeRequest->getShopProcessId(),
+        ));
+        $this->assertTrue($response->wasSuccess(), $response->getMessages()[0]->description ?? 'Unknown');
+        $this->assertInstanceOf(Confirmation::class, $response->getConfirmation());
     }
 
 }

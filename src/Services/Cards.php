@@ -2,9 +2,7 @@
 
 namespace HDSSolutions\Bancard\Services;
 
-use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Responses\CardsNewResponse;
-use HDSSolutions\Bancard\Responses\ChargeResponse;
 use HDSSolutions\Bancard\Responses\UsersCardsResponse;
 
 trait Cards {
@@ -36,16 +34,6 @@ trait Cards {
     public static function users_cards(int $user_id): ?UsersCardsResponse {
         // get a new UserCards request
         $request = self::newUsersCardsRequest($user_id);
-        // execute request
-        $request->execute();
-
-        // return request response
-        return $request->getResponse();
-    }
-
-    public static function charge(Card $card, int $shop_process_id, float $amount, string $currency, string $description): ?ChargeResponse {
-        // get a new Charge request
-        $request = self::newChargeRequest($card, $shop_process_id, $amount, $currency, $description);
         // execute request
         $request->execute();
 

@@ -45,7 +45,7 @@ final class ChargeRequest extends Base\BancardRequest implements Contracts\Charg
 
     public function getOperation(): array {
         return [
-            'shop_process_id'    => (string) $this->getShopProcessId(),
+            'shop_process_id'    => $this->getShopProcessId(),
             'amount'             => number_format($this->getAmount(), 2, '.', ''),
             'iva_amount'         => $this->getIvaAmount() === null ? null
                 : number_format($this->getIvaAmount(), 2, '.', ''),

@@ -3,6 +3,7 @@
 namespace HDSSolutions\Bancard\Builders;
 
 use HDSSolutions\Bancard\Bancard;
+use HDSSolutions\Bancard\Requests\Contracts\ConfirmationRequest;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\Contracts\ChargeRequest;
@@ -26,6 +27,15 @@ final class TokenBuilder {
             $request->shop_process_id,
             $request->amount,
             $request->currency,
+        ));
+    }
+
+    private static function single_buy_confirmations(ConfirmationRequest $request): string {
+        // return a token for Confirmation request
+        return md5(sprintf('%s%u%s',
+            Bancard::getPrivateKey(),
+            $request->shop_process_id,
+            'get_confirmation',
         ));
     }
 
