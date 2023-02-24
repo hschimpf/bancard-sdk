@@ -15,9 +15,9 @@ trait Transactions {
      * @param  string  $currency
      * @param  string  $description
      *
-     * @return ChargeResponse|null
+     * @return ChargeResponse
      */
-    public static function charge(Card $card, int $shop_process_id, float $amount, string $currency, string $description): ?ChargeResponse {
+    public static function charge(Card $card, int $shop_process_id, float $amount, string $currency, string $description): ChargeResponse {
         // get a new Charge request
         $request = self::newChargeRequest($card, $shop_process_id, $amount, $currency, $description);
         // execute request
@@ -30,9 +30,9 @@ trait Transactions {
     /**
      * @param  int  $shop_process_id
      *
-     * @return ConfirmationResponse|null
+     * @return ConfirmationResponse
      */
-    public static function confirmation(int $shop_process_id): ?ConfirmationResponse {
+    public static function confirmation(int $shop_process_id): ConfirmationResponse {
         // get a new Confirmation request
         $request = self::newConfirmationRequest($shop_process_id);
         // execute request

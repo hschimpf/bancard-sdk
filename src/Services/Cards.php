@@ -14,9 +14,9 @@ trait Cards {
      * @param  string  $email
      * @param  string|null  $return_url
      *
-     * @return CardsNewResponse|null
+     * @return CardsNewResponse
      */
-    public static function card_new(int $user_id, int $card_id, string $phone_no, string $email, ?string $return_url = null): ?CardsNewResponse {
+    public static function card_new(int $user_id, int $card_id, string $phone_no, string $email, ?string $return_url = null): CardsNewResponse {
         // get a new CardsNew request
         $request = self::newCardsNewRequest($user_id, $card_id, $phone_no, $email, $return_url);
         // execute request
@@ -29,9 +29,9 @@ trait Cards {
     /**
      * @param  int  $user_id
      *
-     * @return UsersCardsResponse|null
+     * @return UsersCardsResponse
      */
-    public static function users_cards(int $user_id): ?UsersCardsResponse {
+    public static function users_cards(int $user_id): UsersCardsResponse {
         // get a new UserCards request
         $request = self::newUsersCardsRequest($user_id);
         // execute request
