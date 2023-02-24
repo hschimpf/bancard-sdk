@@ -2,7 +2,7 @@
 
 namespace HDSSolutions\Bancard\Models\X;
 
-use HDSSolutions\Bancard\Models\Base\Model;
+use HDSSolutions\Bancard\Models\Base;
 
 /**
  * @property-read int $id Resource Identifier
@@ -17,7 +17,7 @@ use HDSSolutions\Bancard\Models\Base\Model;
  * @property-read ?string $process_result Result of the payment process
  * @property-read ?string $rollback_result Result of the rollback process
  */
-abstract class Payment extends Model implements Contracts\Payment {
+abstract class Payment extends Base\EloquentModel implements Contracts\Payment {
 
     protected $fillable = [
         'type',

@@ -2,6 +2,14 @@
 
 namespace HDSSolutions\Bancard\Models\Base;
 
-abstract class Model extends \Illuminate\Database\Eloquent\Model {
+abstract class Model {
+
+    public function __get(string $name) {
+        if ( !property_exists($this, $name)) {
+            trigger_error(sprintf('Undefined property: %s::$%s', get_class($this), $name), E_USER_ERROR);
+        }
+
+        return $this->$name;
+    }
 
 }

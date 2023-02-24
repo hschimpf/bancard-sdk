@@ -11,7 +11,7 @@ use HDSSolutions\Bancard\Models\Base;
  * @property string $phone_no Phone number of the User
  * @property string $email Email address of the User
  */
-abstract class Card extends Base\Model implements Contracts\Card {
+abstract class Card extends Base\EloquentModel implements Contracts\Card {
 
     protected $fillable = [
         'user_id',

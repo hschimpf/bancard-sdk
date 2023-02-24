@@ -2,6 +2,7 @@
 
 namespace HDSSolutions\Bancard\Responses;
 
+use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
 final class UsersCardsResponse extends Base\BancardResponse implements Contracts\UsersCardsResponse {
@@ -14,8 +15,10 @@ final class UsersCardsResponse extends Base\BancardResponse implements Contracts
     }
 
     protected static function make(BancardRequest $request, object $data): self {
+        // create an instance of every card
+        $cards = array_map(fn($card) => new Card($card), $data->cards);
         // store user cards
-        return new self($request, $data->cards);
+        return new self($request, $cards);
     }
 
     public function getCards(): array {
