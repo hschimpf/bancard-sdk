@@ -17,6 +17,14 @@ abstract class BancardRequest implements Contracts\BancardRequest {
         private Bancard $bancard,
     ) {}
 
+    public function getMethod(): string {
+        return 'POST';
+    }
+
+    public function getOperation(): array {
+        return [];
+    }
+
     abstract protected function buildResponse(Response $response): BancardResponse;
 
     final public function execute(): bool {

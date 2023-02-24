@@ -23,10 +23,6 @@ final class CardsNewRequest extends Base\BancardRequest implements Contracts\Car
         parent::__construct($bancard);
     }
 
-    public function getMethod(): string {
-        return 'POST';
-    }
-
     public function getEndpoint(): string {
         return 'cards/new';
     }

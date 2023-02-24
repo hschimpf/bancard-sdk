@@ -35,10 +35,6 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
         parent::__construct($bancard);
     }
 
-    public function getMethod(): string {
-        return 'POST';
-    }
-
     public function getEndpoint(): string {
         return 'single_buy';
     }
