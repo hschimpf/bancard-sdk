@@ -4,9 +4,11 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\X\Contracts\Payment;
+use HDSSolutions\Bancard\Models\Currency;
+use HDSSolutions\Bancard\Models\PendingPayment;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 use HDSSolutions\Bancard\Responses\SingleBuyResponse;
+use RuntimeException;
 
 final class SingleBuyRequest extends Base\BancardRequest implements Contracts\SingleBuyRequest {
 
@@ -22,17 +24,23 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
 
     /**
      * @param  Bancard  $bancard
-     * @param  Payment  $payment
+     * @param  PendingPayment  $pending_payment
      * @param  string|null  $return_url
      * @param  string|null  $cancel_url
      */
     public function __construct(
         Bancard $bancard,
-        private Payment $payment,
+        private PendingPayment $pending_payment,
         private ?string $return_url = null,
         private ?string $cancel_url = null,
     ) {
         parent::__construct($bancard);
+
+        // validate currency through local model
+        if ( !Currency::isValid($this->currency)) {
+            // reject with an exception
+            throw new RuntimeException(sprintf("Invalid currency (%s)", $this->currency));
+        }
     }
 
     public function getEndpoint(): string {
@@ -59,19 +67,19 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
     }
 
     public function getShopProcessId(): int {
-        return $this->payment->shop_process_id;
+        return $this->pending_payment->shop_process_id;
     }
 
     public function getCurrency(): string {
-        return $this->payment->currency;
+        return $this->pending_payment->currency;
     }
 
     public function getAmount(): float {
-        return $this->payment->amount;
+        return $this->pending_payment->amount;
     }
 
     public function getDescription(): string {
-        return $this->payment->description;
+        return $this->pending_payment->description;
     }
 
     public function setAdditionalData(?string $additional_data): ?string {

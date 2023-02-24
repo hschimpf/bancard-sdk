@@ -4,7 +4,7 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\X\Contracts\PendingCard;
+use HDSSolutions\Bancard\Models\PendingCard;
 use HDSSolutions\Bancard\Responses\CardsNewResponse;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 
@@ -12,12 +12,12 @@ final class CardsNewRequest extends Base\BancardRequest implements Contracts\Car
 
     /**
      * @param  Bancard  $bancard
-     * @param  PendingCard  $card
+     * @param  PendingCard  $pending_card
      * @param  string|null  $return_url
      */
     public function __construct(
         Bancard $bancard,
-        private PendingCard $card,
+        private PendingCard $pending_card,
         private ?string $return_url = null,
     ) {
         parent::__construct($bancard);
@@ -43,19 +43,19 @@ final class CardsNewRequest extends Base\BancardRequest implements Contracts\Car
     }
 
     public function getCardId(): int {
-        return $this->card->card_id;
+        return $this->pending_card->card_id;
     }
 
     public function getUserId(): int {
-        return $this->card->user_id;
+        return $this->pending_card->user_id;
     }
 
     public function getUserCellPhone(): string {
-        return $this->card->phone_no;
+        return $this->pending_card->user_cell_phone;
     }
 
     public function getUserMail(): string {
-        return $this->card->email;
+        return $this->pending_card->user_email;
     }
 
     public function setReturnUrl(?string $return_url): ?string {

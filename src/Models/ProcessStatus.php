@@ -9,4 +9,9 @@ final class ProcessStatus {
      */
     public const SUCCESS = 'success';
 
+    /**
+     * Failed process flag
+     */
+    public const ERROR = 'error';
+
 }
