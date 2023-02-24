@@ -2,15 +2,20 @@
 
 namespace HDSSolutions\Bancard\Responses;
 
+use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
+
 final class SingleBuyResponse extends Base\BancardResponse implements Contracts\SingleBuyResponse {
 
     private function __construct(
+        BancardRequest $request,
         private ?string $process_id,
-    ) {}
+    ) {
+        parent::__construct($request);
+    }
 
-    protected static function make(object $data): self {
+    protected static function make(BancardRequest $request, object $data): self {
         // store process ID
-        return new self($data->process_id ?? null);
+        return new self($request, $data->process_id ?? null);
     }
 
     public function getProcessId(): ?string {

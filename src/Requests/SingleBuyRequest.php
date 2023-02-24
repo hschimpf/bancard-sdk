@@ -53,9 +53,9 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
         ] : []);
     }
 
-    protected function buildResponse(Response $response): BancardResponse {
+    protected function buildResponse(Contracts\BancardRequest $request, Response $response): BancardResponse {
         // return parsed response
-        return SingleBuyResponse::fromGuzzle($response);
+        return SingleBuyResponse::fromGuzzle($request, $response);
     }
 
     public function getShopProcessId(): int {

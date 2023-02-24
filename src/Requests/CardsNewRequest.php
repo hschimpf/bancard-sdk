@@ -37,9 +37,9 @@ final class CardsNewRequest extends Base\BancardRequest implements Contracts\Car
         ];
     }
 
-    protected function buildResponse(Response $response): BancardResponse {
+    protected function buildResponse(Contracts\BancardRequest $request, Response $response): BancardResponse {
         // return parsed response
-        return CardsNewResponse::fromGuzzle($response);
+        return CardsNewResponse::fromGuzzle($request, $response);
     }
 
     public function getCardId(): int {

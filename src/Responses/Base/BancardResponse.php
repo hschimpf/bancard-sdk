@@ -4,11 +4,16 @@ namespace HDSSolutions\Bancard\Responses\Base;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Models\ProcessStatus;
+use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use HDSSolutions\Bancard\Responses\Contracts;
 use HDSSolutions\Bancard\Responses\Structs\BancardMessage;
 use JsonException;
 
 abstract class BancardResponse implements Contracts\BancardResponse {
+
+    public function __construct(
+        private BancardRequest $request,
+    ) {}
 
     /**
      * @var Response Guzzle original response
@@ -25,9 +30,9 @@ abstract class BancardResponse implements Contracts\BancardResponse {
      */
     private array $messages = [];
 
-    abstract protected static function make(object $data): self;
+    abstract protected static function make(BancardRequest $request, object $data): self;
 
-    final public static function fromGuzzle(Response $response): self {
+    final public static function fromGuzzle(BancardRequest $request, Response $response): self {
         try {
             // get response body
             $body = json_decode($response->getBody()->getContents(), false, 512, JSON_THROW_ON_ERROR);
@@ -52,7 +57,7 @@ abstract class BancardResponse implements Contracts\BancardResponse {
         $messages = $body->messages ?? []; unset($body->messages);
 
         // build Bancard response instance
-        $instance = static::make($body);
+        $instance = static::make($request, $body);
 
         // store guzzle original response
         $instance->response = $response;
@@ -63,6 +68,10 @@ abstract class BancardResponse implements Contracts\BancardResponse {
 
         // return response instance
         return $instance;
+    }
+
+    final public function getRequest(): mixed {
+        return $this->request;
     }
 
     final public function getStatusCode(): int {

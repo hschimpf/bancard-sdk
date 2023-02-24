@@ -25,13 +25,13 @@ abstract class BancardRequest implements Contracts\BancardRequest {
         return [];
     }
 
-    abstract protected function buildResponse(Response $response): BancardResponse;
+    abstract protected function buildResponse(Contracts\BancardRequest $request, Response $response): BancardResponse;
 
     final public function execute(): bool {
         // execute this request and get result
         $response = $this->bancard->request($this);
         // parse and store response
-        $this->response = $this->buildResponse($response);
+        $this->response = $this->buildResponse($this, $response);
         // return response status
         return $this->getResponse()?->wasSuccess() ?? false;
     }

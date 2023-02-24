@@ -24,9 +24,9 @@ final class UsersCardsRequest extends Base\BancardRequest implements Contracts\U
         return sprintf('users/%u/cards', $this->getUserId());
     }
 
-    protected function buildResponse(Response $response): BancardResponse {
+    protected function buildResponse(Contracts\BancardRequest $request, Response $response): BancardResponse {
         // return parsed response
-        return UsersCardsResponse::fromGuzzle($response);
+        return UsersCardsResponse::fromGuzzle($request, $response);
     }
 
     public function getUserId(): int {
