@@ -12,4 +12,8 @@ abstract class Model {
         return $this->$name;
     }
 
+    public function __isset(string $name): bool {
+        return property_exists($this, $name);
+    }
+
 }
