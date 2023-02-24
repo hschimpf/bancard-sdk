@@ -2,7 +2,9 @@
 
 namespace HDSSolutions\Bancard\Builders;
 
+use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Models\PendingCard;
+use HDSSolutions\Bancard\Requests\CardDeleteRequest;
 use HDSSolutions\Bancard\Requests\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\UsersCardsRequest;
 
@@ -19,6 +21,11 @@ trait CardsRequests {
     public static function newUsersCardsRequest(int $user_id): UsersCardsRequest {
         // return the request
         return new UsersCardsRequest(self::instance(), $user_id);
+    }
+
+    public static function newCardDeleteRequest(Card $card): CardDeleteRequest {
+        // return the request
+        return new CardDeleteRequest(self::instance(), $card);
     }
 
 }

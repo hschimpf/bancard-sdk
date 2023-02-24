@@ -2,6 +2,8 @@
 
 namespace HDSSolutions\Bancard\Services;
 
+use HDSSolutions\Bancard\Models\Card;
+use HDSSolutions\Bancard\Responses\CardDeleteResponse;
 use HDSSolutions\Bancard\Responses\CardsNewResponse;
 use HDSSolutions\Bancard\Responses\UsersCardsResponse;
 
@@ -34,6 +36,21 @@ trait Cards {
     public static function users_cards(int $user_id): UsersCardsResponse {
         // get a new UserCards request
         $request = self::newUsersCardsRequest($user_id);
+        // execute request
+        $request->execute();
+
+        // return request response
+        return $request->getResponse();
+    }
+
+    /**
+     * @param  Card  $card
+     *
+     * @return CardDeleteResponse
+     */
+    public static function card_delete(Card $card): CardDeleteResponse {
+        // get a new CardDelete request
+        $request = self::newCardDeleteRequest($card);
         // execute request
         $request->execute();
 

@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard\Builders;
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Requests\Contracts\ConfirmationRequest;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
+use HDSSolutions\Bancard\Requests\Contracts\CardDeleteRequest;
 use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
 use HDSSolutions\Bancard\Requests\Contracts\ChargeRequest;
 use HDSSolutions\Bancard\Requests\Contracts\PreauthorizationConfirmRequest;
@@ -16,13 +17,17 @@ final class TokenBuilder {
 
     public static function for(BancardRequest $request): string {
         // sanitize endpoint name
-        $method = preg_replace([ '/\d/', '/\/(\/)*/' ], [ '', '_' ], $request->getEndpoint());
+        $method = sprintf("%s_%s",
+            // POST => post
+            strtolower($request->getMethod()),
+            // users/{id}/cards => users_cards
+            preg_replace(['/\d/', '/\/(\/)*/'], ['', '_'], $request->getEndpoint()));
 
         // return token for request
         return self::$method($request);
     }
 
-    private static function single_buy(SingleBuyRequest $request): string {
+    private static function post_single_buy(SingleBuyRequest $request): string {
         // return a token for a SingleBuy request
         return md5(sprintf('%s%u%.2F%s',
             Bancard::getPrivateKey(),
@@ -32,7 +37,7 @@ final class TokenBuilder {
         ));
     }
 
-    private static function single_buy_confirmations(ConfirmationRequest $request): string {
+    private static function post_single_buy_confirmations(ConfirmationRequest $request): string {
         // return a token for Confirmation request
         return md5(sprintf('%s%u%s',
             Bancard::getPrivateKey(),
@@ -41,7 +46,7 @@ final class TokenBuilder {
         ));
     }
 
-    private static function preauthorizations_confirm(PreauthorizationConfirmRequest $request): string {
+    private static function post_preauthorizations_confirm(PreauthorizationConfirmRequest $request): string {
         // return a token for Confirmation request
         return md5(sprintf('%s%u%s',
             Bancard::getPrivateKey(),
@@ -50,7 +55,7 @@ final class TokenBuilder {
         ));
     }
 
-    private static function single_buy_rollback(RollbackRequest $request): string {
+    private static function post_single_buy_rollback(RollbackRequest $request): string {
         // return a token for Rollback request
         return md5(sprintf('%s%u%s%0.2F',
             Bancard::getPrivateKey(),
@@ -60,7 +65,7 @@ final class TokenBuilder {
         ));
     }
 
-    private static function cards_new(CardsNewRequest $request): string {
+    private static function post_cards_new(CardsNewRequest $request): string {
         // return a token for a CardsNew request
         return md5(sprintf('%s%u%u%s',
             Bancard::getPrivateKey(),
@@ -70,7 +75,7 @@ final class TokenBuilder {
         ));
     }
 
-    private static function users_cards(UsersCardsRequest $request): string {
+    private static function post_users_cards(UsersCardsRequest $request): string {
         // return a token for a UserCards request
         return md5(sprintf('%s%u%s',
             Bancard::getPrivateKey(),
@@ -79,7 +84,17 @@ final class TokenBuilder {
         ));
     }
 
-    private static function charge(ChargeRequest $request): string {
+    private static function delete_users_cards(CardDeleteRequest $request): string {
+        // return a token for a UserCards request
+        return md5(sprintf('%s%s%u%s',
+            Bancard::getPrivateKey(),
+            'delete_card',
+            $request->user_id,
+            $request->card->alias_token,
+        ));
+    }
+
+    private static function post_charge(ChargeRequest $request): string {
         // return a token for Charge request
         return md5(sprintf('%s%u%s%.2F%s%s',
             Bancard::getPrivateKey(),

@@ -8,6 +8,7 @@ use HDSSolutions\Bancard\Models\Card;
 use HDSSolutions\Bancard\Models\Confirmation;
 use HDSSolutions\Bancard\Models\Currency;
 use HDSSolutions\Bancard\Requests\ChargeRequest;
+use HDSSolutions\Bancard\Responses\CardDeleteResponse;
 use HDSSolutions\Bancard\Responses\Contracts\ConfirmationResponse;
 use HDSSolutions\Bancard\Responses\Contracts\RollbackResponse;
 use HDSSolutions\Bancard\Responses\Contracts\UsersCardsResponse;
@@ -73,6 +74,19 @@ final class Bancard_20_UsersCardsTests extends TestCase {
     public function testRollbackRequest(ChargeRequest $chargeRequest): void {
         $this->assertInstanceOf(RollbackResponse::class, $response = Bancard::rollback(
             shop_process_id: $chargeRequest->getShopProcessId(),
+        ));
+        $this->assertTrue($response->wasSuccess(), $response->getMessages()[0]->description ?? 'Unknown');
+    }
+
+    /**
+     * @param  Card  $card
+     *
+     * @return void
+     * @depends testUserCardsRequest
+     */
+    public function testCardDeleteRequest(Card $card): void {
+        $this->assertInstanceOf(CardDeleteResponse::class, $response = Bancard::card_delete(
+            card: $card,
         ));
         $this->assertTrue($response->wasSuccess(), $response->getMessages()[0]->description ?? 'Unknown');
     }
