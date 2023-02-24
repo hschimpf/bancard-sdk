@@ -1,0 +1,8 @@
+/logs/
+/vendor/
+/.idea/
+/.vscode/
+/tests/.env
+
+composer.lock
+*.cache
