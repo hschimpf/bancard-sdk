@@ -31,10 +31,15 @@ trait BuildsRequests {
                     // set public key
                     'public_key' => Bancard::getPublicKey(),
                     // get operation params
-                    'operation' => $request->getOperation(),
+                    'operation' => array_merge(
+                        // add token for the operation
+                        [ 'token' => $request->getToken() ],
+                        // add request operation info
+                        $request->getOperation(),
+                    ),
                 ],
             ],
-            default          => throw new RuntimeException('Unsupported request type'),
+            default => throw new RuntimeException('Unsupported request type'),
         };
 
         try {

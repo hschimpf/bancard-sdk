@@ -2,8 +2,6 @@
 
 namespace HDSSolutions\Bancard\Models;
 
-use HDSSolutions\Bancard\Builders\TokenBuilder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use RuntimeException;
 
 final class Payment extends X\Payment {
@@ -17,13 +15,6 @@ final class Payment extends X\Payment {
      */
     public static function newSingleBuy(int $shop_process_id, float $amount, string $description, ?string $currency = null): self {
         return self::newPayment(PaymentType::SingleBuy, $shop_process_id, $amount, $description, $currency);
-    }
-
-    /**
-     * @return Attribute Attribute assessor for building the token
-     */
-    public function token(): Attribute {
-        return Attribute::get(fn($token) => TokenBuilder::for($this));
     }
 
     /**

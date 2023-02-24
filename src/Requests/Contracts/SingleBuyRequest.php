@@ -13,11 +13,6 @@ namespace HDSSolutions\Bancard\Requests\Contracts;
  */
 interface SingleBuyRequest extends BancardRequest {
 
-    /**
-     * @return string Token of the Process
-     */
-    public function getToken(): string;
-
     public function getShopProcessId(): int;
 
     public function getCurrency(): string;

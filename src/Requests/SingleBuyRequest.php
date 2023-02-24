@@ -4,6 +4,7 @@ namespace HDSSolutions\Bancard\Requests;
 
 use GuzzleHttp\Psr7\Response;
 use HDSSolutions\Bancard\Bancard;
+use HDSSolutions\Bancard\Builders\TokenBuilder;
 use HDSSolutions\Bancard\Models\Payment;
 use HDSSolutions\Bancard\Responses\Contracts\BancardResponse;
 use HDSSolutions\Bancard\Responses\SingleBuyResponse;
@@ -45,7 +46,6 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
 
     public function getOperation(): array {
         return array_merge([
-            'token'           => $this->getToken(),
             'shop_process_id' => $this->getShopProcessId(),
             'currency'        => $this->getCurrency(),
             'amount'          => number_format($this->getAmount(), 2, '.', ''),
@@ -64,7 +64,7 @@ final class SingleBuyRequest extends Base\BancardRequest implements Contracts\Si
     }
 
     public function getToken(): string {
-        return $this->payment->token;
+        return TokenBuilder::for($this);
     }
 
     public function getShopProcessId(): int {

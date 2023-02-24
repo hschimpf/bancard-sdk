@@ -3,21 +3,22 @@
 namespace HDSSolutions\Bancard\Builders;
 
 use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\Payment;
+use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
+use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
 
 final class TokenBuilder {
 
-    public static function for(Payment $payment): string {
-        return self::{$payment->type}($payment);
+    public static function for(BancardRequest $request): string {
+        return self::{$request->getEndpoint()}($request);
     }
 
-    private static function single_buy(Payment $payment): string {
+    private static function single_buy(SingleBuyRequest $request): string {
         // return a token for
         return md5(sprintf("%s%u%.2F%s",
             Bancard::getPrivateKey(),
-            $payment->shop_process_id,
-            $payment->amount,
-            $payment->currency,
+            $request->shop_process_id,
+            $request->amount,
+            $request->currency,
         ));
     }
 
