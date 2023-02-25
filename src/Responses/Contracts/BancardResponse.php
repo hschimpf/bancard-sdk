@@ -2,6 +2,9 @@
 
 namespace HDSSolutions\Bancard\Responses\Contracts;
 
+use HDSSolutions\Bancard\Requests\Contracts\CardsNewRequest;
+use HDSSolutions\Bancard\Requests\Contracts\SingleBuyRequest;
+use HDSSolutions\Bancard\Requests\Contracts\UsersCardsRequest;
 use HDSSolutions\Bancard\Responses\Structs\BancardMessage;
 use Psr\Http\Message\StreamInterface;
 
@@ -13,7 +16,7 @@ interface BancardResponse {
     public function getBody(): mixed;
 
     /**
-     * @return CardsNewResponse | SingleBuyResponse | UsersCardsResponse Request made for this Response
+     * @return CardsNewRequest | SingleBuyRequest | UsersCardsRequest Request made for this Response
      */
     public function getRequest(): mixed;
 
