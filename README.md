@@ -1,6 +1,6 @@
 # Bancard SDK
 
-> Library to implement [Bancard vPOS](https://bancard.com.py/vpos) product.
+Library to implement [Bancard vPOS](https://bancard.com.py/vpos) product.
 
 [![Latest Stable Version](http://poser.pugx.org/hds-solutions/bancard-sdk/v)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![Total Downloads](http://poser.pugx.org/hds-solutions/bancard-sdk/downloads)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![License](http://poser.pugx.org/hds-solutions/bancard-sdk/license)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![PHP Version Require](http://poser.pugx.org/hds-solutions/bancard-sdk/require/php)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
@@ -9,7 +9,9 @@
 - PHP >= 8.0
 
 ### Through composer
-`$ composer require hds-solutions/bancard-sdk`
+```bash
+composer require hds-solutions/bancard-sdk
+```
 
 ## Usage
 To set your Bancard credentials, use the `Bancard::credentials()` method.
@@ -242,4 +244,4 @@ If you encounter any security related issue, feel free to raise a ticket on the 
 - [Hermann D. Schimpf](https://hds-solutions.net)
 
 # Licence
-GPL-3.0. Please see [License File](LICENSE.md) for more information.
+GPL-3.0 Please see [License File](LICENSE) for more information.
