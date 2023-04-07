@@ -2,7 +2,7 @@
 
 Library to implement [Bancard vPOS](https://bancard.com.py/vpos) product.
 
-[![Latest Stable Version](http://poser.pugx.org/hds-solutions/bancard-sdk/v)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![Total Downloads](http://poser.pugx.org/hds-solutions/bancard-sdk/downloads)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![License](http://poser.pugx.org/hds-solutions/bancard-sdk/license)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![PHP Version Require](http://poser.pugx.org/hds-solutions/bancard-sdk/require/php)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![Latest Stable Version](https://img.shields.io/packagist/v/hds-solutions/bancard-sdk?label=stable&color=009664)](https://github.com/hschimpf/bancard-sdk/releases/latest) [![License](https://img.shields.io/packagist/l/hds-solutions/bancard-sdk?color=80B2CB)](https://github.com/hschimpf/bancard-sdk/blob/main/LICENSE) [![Total Downloads](https://img.shields.io/packagist/dt/hds-solutions/bancard-sdk?color=878787)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![PHP Version Require](https://img.shields.io/packagist/dependency-v/hds-solutions/bancard-sdk/php?color=006496)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
 ## Installation
 ### Dependencies
