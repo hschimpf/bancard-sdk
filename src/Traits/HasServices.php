@@ -8,6 +8,7 @@ trait HasServices {
     use Services\SingleBuy;
     use Services\Cards;
     use Services\Transactions;
+    use Services\QR;
 
     private function init(): void {}
 

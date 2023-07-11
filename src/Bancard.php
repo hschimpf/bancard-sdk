@@ -26,6 +26,11 @@ final class Bancard {
     private const URI_Production = 'https://vpos.infonet.com.py';
 
     /**
+     * Base URI for production environment (QR Payments)
+     */
+    private const URI_Production_QR = 'https://comercios.bancard.com.py';
+
+    /**
      * @var self Singleton instance
      */
     private static self $singleton;
@@ -51,18 +56,29 @@ final class Bancard {
     private Client $client;
 
     /**
+     * @var Client HTTP Client to Bancard services (QR Payments)
+     */
+    private Client $client_qr;
+
+    /**
      * @var RequestInterface|null Latest request sent
      */
     private ?RequestInterface $latest_request = null;
 
     private function __construct() {
-        // init HTTP client
+        // init HTTP clients
         $this->client = new Client([
            'base_uri' => self::isProduction()
                ? self::URI_Production
                : self::URI_Staging,
            'handler'  => $stack = HandlerStack::create(),
-       ]);
+        ]);
+        // use the same client for development environment
+        $this->client_qr = self::isDevelop() ? $this->client : new Client([
+           'base_uri' => self::URI_Production_QR,
+           'handler'  => $stack,
+        ]);
+
         // add a middleware to capture requests sent body
         $stack->push(Middleware::mapRequest(function(RequestInterface $request) {
             // store request made
@@ -70,6 +86,7 @@ final class Bancard {
 
             return $request;
         }));
+
         // init services
         $this->HasServices_init();
     }

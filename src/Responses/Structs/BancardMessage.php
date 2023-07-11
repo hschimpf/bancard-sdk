@@ -27,7 +27,7 @@ final class BancardMessage {
     public function __construct(stdClass $message) {
         $this->key = $message->key;
         $this->level = $message->level;
-        $this->description = $message->dsc;
+        $this->description = $message->dsc ?? $message->description ?? 'Unknown';
     }
 
 }
