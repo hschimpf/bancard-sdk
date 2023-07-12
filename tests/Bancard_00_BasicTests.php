@@ -15,12 +15,14 @@ final class Bancard_00_BasicTests extends TestCase {
     }
 
     public function testThatCredentialsCanBeSet(): void {
-        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv = Dotenv::createUnsafeImmutable(__DIR__);
         $dotenv->load();
 
         Bancard::credentials(
-            publicKey:  getenv('BANCARD_PUBLIC_KEY'),
-            privateKey: getenv('BANCARD_PRIVATE_KEY'),
+            publicKey:        getenv('BANCARD_PUBLIC_KEY'),
+            privateKey:       getenv('BANCARD_PRIVATE_KEY'),
+            qr_commerce_code: (int) getenv('BANCARD_QR_COMMERCE_CODE'),
+            qr_branch_code:   (int) getenv('BANCARD_QR_BRANCH_CODE'),
         );
         $this->assertSame(Bancard::getPrivateKey(), getenv('BANCARD_PRIVATE_KEY'));
     }
