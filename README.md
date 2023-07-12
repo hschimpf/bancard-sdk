@@ -2,7 +2,10 @@
 
 Library to implement [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancard VentasQR](https://comercios.bancard.com.py/productos/ventas-qr) products.
 
-[![Latest Stable Version](http://poser.pugx.org/hds-solutions/bancard-sdk/v)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![Total Downloads](http://poser.pugx.org/hds-solutions/bancard-sdk/downloads)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![License](http://poser.pugx.org/hds-solutions/bancard-sdk/license)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![PHP Version Require](http://poser.pugx.org/hds-solutions/bancard-sdk/require/php)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![Latest Stable Version](http://poser.pugx.org/hds-solutions/bancard-sdk/v)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![Total Downloads](http://poser.pugx.org/hds-solutions/bancard-sdk/downloads)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![License](http://poser.pugx.org/hds-solutions/bancard-sdk/license)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![PHP Version Require](http://poser.pugx.org/hds-solutions/bancard-sdk/require/php)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
 ## Installation
 ### Dependencies
@@ -308,10 +311,14 @@ $qrRevertResponse = Bancard::qr_revert(
 ```
 
 # Security Vulnerabilities
-If you encounter any security related issue, feel free to raise a ticket on the issue traker.
+If you encounter any security-related issues, please feel free to raise a ticket on the issue tracker.
 
-# Contributors
+# Contributing
+Contributions are welcome! If you find any issues or would like to add new features or improvements, please feel free to submit a pull request.
+
+## Contributors
 - [Hermann D. Schimpf](https://hds-solutions.net)
 
 # Licence
-GPL-3.0 Please see [License File](LICENSE) for more information.
+This library is open-source software licensed under the [GPL-3.0 License](LICENSE).
+Please see the [License File](LICENSE) for more information.
