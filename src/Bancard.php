@@ -5,6 +5,7 @@ namespace HDSSolutions\Bancard;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use HDSSolutions\Bancard\Requests\Base\BancardRequest;
 use HDSSolutions\Bancard\Traits\BuildsRequests;
 use HDSSolutions\Bancard\Traits\HasServices;
 use Psr\Http\Message\RequestInterface;
@@ -51,6 +52,16 @@ final class Bancard {
     private static ?string $PRIVATE_KEY = null;
 
     /**
+     * @var int|null Commerce code for QR Payments
+     */
+    private static ?int $QR_COMMERCE_CODE = null;
+
+    /**
+     * @var int|null Branch code for QR Payments
+     */
+    private static ?int $QR_BRANCH_CODE = null;
+
+    /**
      * @var Client HTTP Client to Bancard services
      */
     private Client $client;
@@ -91,28 +102,6 @@ final class Bancard {
         $this->HasServices_init();
     }
 
-    public function getLatestRequest(): ?RequestInterface {
-        return $this->latest_request;
-    }
-
-    /**
-     * Returns the registered Public Key
-     *
-     * @return string Public Key
-     */
-    public static function getPublicKey(): string {
-        return self::$PUBLIC_KEY;
-    }
-
-    /**
-     * Returns the registered Private Key
-     *
-     * @return string Private Key
-     */
-    public static function getPrivateKey(): string {
-        return self::$PRIVATE_KEY;
-    }
-
     /**
      * @return self Returns singleton instance
      */
@@ -123,12 +112,66 @@ final class Bancard {
     /**
      * Stores the credentials to use for communication with Bancard services
      *
-     * @param  ?string  $publicKey  Public Key.
-     * @param  ?string  $privateKey  Private Key
+     * @param  string|null  $publicKey  Public Key.
+     * @param  string|null  $privateKey  Private Key
+     * @param  int|null  $qr_commerce_code  Commerce code for QR Payments
+     * @param  int|null  $qr_branch_code  Branch code for QR Payments
      */
-    public static function credentials(?string $publicKey, ?string $privateKey): void {
+    public static function credentials(
+        ?string $publicKey,
+        ?string $privateKey,
+        ?int $qr_commerce_code = null,
+        ?int $qr_branch_code = null,
+    ): void {
         self::$PUBLIC_KEY = $publicKey;
         self::$PRIVATE_KEY = $privateKey;
+
+        self::$QR_COMMERCE_CODE = $qr_commerce_code ?? self::$QR_COMMERCE_CODE;
+        self::$QR_BRANCH_CODE = $qr_branch_code ?? self::$QR_BRANCH_CODE;
+    }
+
+    /**
+     * @return RequestInterface|null Latest request sent to Bancard
+     * @internal Used by {@see BancardRequest::execute()} to store the latest request sent
+     */
+    public function getLatestRequest(): ?RequestInterface {
+        return $this->latest_request;
+    }
+
+    /**
+     * Returns the registered Public Key
+     *
+     * @return string|null Public Key
+     */
+    public static function getPublicKey(): ?string {
+        return self::$PUBLIC_KEY;
+    }
+
+    /**
+     * Returns the registered Private Key
+     *
+     * @return string|null Private Key
+     */
+    public static function getPrivateKey(): ?string {
+        return self::$PRIVATE_KEY;
+    }
+
+    /**
+     * Returns the Commerce code for QR Payments
+     *
+     * @return int|null Commerce code
+     */
+    public static function getQRCommerceCode(): ?int {
+        return self::$QR_COMMERCE_CODE;
+    }
+
+    /**
+     * Returns the Branch code for QR Payments
+     *
+     * @return int|null Branch code
+     */
+    public static function getQRBranchCode(): ?int {
+        return self::$QR_BRANCH_CODE;
     }
 
     public static function useDevelop(bool $develop = true): void {

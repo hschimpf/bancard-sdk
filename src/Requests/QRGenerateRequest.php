@@ -24,7 +24,10 @@ final class QRGenerateRequest extends Base\BancardRequest implements Contracts\Q
     }
 
     public function getEndpoint(): string {
-        return sprintf('/external-commerce/api/0.1/commerces/%s/branches/%s/selling/generate-qr-express', 1234, 1);
+        return sprintf('/external-commerce/api/0.1/commerces/%s/branches/%s/selling/generate-qr-express',
+            Bancard::getQRCommerceCode(),
+            Bancard::getQRBranchCode(),
+        );
     }
 
     public function getOperation(): array {
