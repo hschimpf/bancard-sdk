@@ -11,9 +11,7 @@ use HDSSolutions\Bancard\Traits\HasServices;
 use Psr\Http\Message\RequestInterface;
 
 final class Bancard {
-    use HasServices {
-        HasServices::init as HasServices_init;
-    }
+    use HasServices;
     use BuildsRequests;
 
     /**
