@@ -64,11 +64,8 @@ trait BuildsRequests {
      * @return Response Response from Bancard
      */
     public function request_qr(BancardRequest $request): Response {
-        // build request params
+        // build request options with the authorization request header
         $options = [
-            // get operation params
-            RequestOptions::JSON    => $request->getOperation(),
-            // add authorization request header
             RequestOptions::HEADERS => [
                 'Authorization' => sprintf('Basic %s', base64_encode(sprintf('apps/%s:%s',
                     Bancard::getPrivateKey(),
@@ -76,6 +73,11 @@ trait BuildsRequests {
                 ))),
             ],
         ];
+
+        if ( !empty($request->getOperation())) {
+            // add operation params
+            $options[RequestOptions::JSON] = $request->getOperation();
+        }
 
         try {
             // execute request through HTTP client
