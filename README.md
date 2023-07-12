@@ -1,6 +1,6 @@
 # Bancard SDK
 
-Library to implement [Bancard vPOS](https://bancard.com.py/vpos) product.
+Library to implement [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancard VentasQR](https://comercios.bancard.com.py/productos/ventas-qr) products.
 
 [![Latest Stable Version](http://poser.pugx.org/hds-solutions/bancard-sdk/v)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![Total Downloads](http://poser.pugx.org/hds-solutions/bancard-sdk/downloads)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![License](http://poser.pugx.org/hds-solutions/bancard-sdk/license)](https://packagist.org/packages/hds-solutions/bancard-sdk) [![PHP Version Require](http://poser.pugx.org/hds-solutions/bancard-sdk/require/php)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
@@ -34,7 +34,7 @@ This method also can receive a boolean parameter. For example, in Laravel you ca
 Bancard::useProduction(config('app.env') === 'production');
 ```
 
-## Request and Response objects
+## Request and Response objects features
 The request and the response objects have some helper methods:
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -69,7 +69,18 @@ $response = $request->getResponse();
 print_r($request->getBody()->getContents());
 ```
 
-## SingleBuy
+## vPOS
+- **Single Buy**
+- **Single Buy Zimple**
+- **Cards New**
+- **User Cards**
+- **Card Delete**
+- **Charge**
+- **Confirmation**
+- **Preauthorization Confirm**
+- **Rollback**
+
+### SingleBuy
 Endpoint used to generate a process ID to call the Bancard `<iframe>` for an one-time payment.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -93,7 +104,7 @@ if ( !$singleBuyResponse->wasSuccess()) {
 $process_id = $singleBuyResponse->getProcessId();
 ```
 
-## SingleBuy Zimple
+### SingleBuy Zimple
 Same as above, but for `Zimple` payments.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -110,7 +121,7 @@ $singleBuyResponse = Bancard::single_buy_zimple(
 );
 ```
 
-## Customizable requests
+### Customizable requests
 If you need, you can create a pending request and change the values on runtime. This applies to all available requests.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -136,7 +147,7 @@ if ( !$singleBuyRequest->execute()) {
 }
 ```
 
-## CardsNew
+### CardsNew
 Endpoint used to generate a process ID to call the Bancard `<iframe>` for card registry.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -153,7 +164,7 @@ $cardsNewResponse = Bancard::card_new(
 $cardsNewResponse->getProcessId();
 ```
 
-## UsersCards
+### UsersCards
 Endpoint used to get the registered user cards.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -172,7 +183,7 @@ foreach ($usersCardsResponse->getCards() as $card) {
 }
 ```
 
-## CardDelete
+### CardDelete
 Endpoint to remove a registered card. You need an instance of `Card` model obtained from previous request.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -183,7 +194,7 @@ $cardDeleteResponse = Bancard::card_delete(
 );
 ```
 
-## Charge
+### Charge
 Endpoint used to make a payment using a registered user card. You need an instance of `Card` model obtained from `Bancard::users_cards()`.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -216,7 +227,7 @@ echo sprintf('Country: %s, Risk Index: %.2F',
     $securityInformation->risk_index);
 ```
 
-## Confirmation
+### Confirmation
 Endpoint to get the confirmation of a payment. Example, in case the above charge request stayed as a pending of confirmation payment.
 ```php
 use HDSSolutions\Bancard\Bancard;
@@ -227,13 +238,72 @@ $confirmationResponse = Bancard::confirmation(
 );
 ```
 
-## Rollback
+### Rollback
 Endpoint to rollback a payment.
 ```php
 use HDSSolutions\Bancard\Bancard;
 
 $rollbackResponse = Bancard::rollback(
     shop_process_id: $chargeResponse->getRequest()->getShopProcessId(),
+);
+```
+
+## VentasQR
+- **QR Generate**
+- **QR Revert**
+
+### Commerce code & Branch code
+In order to use VentasQR, you need to set your commerce code and branch code through the `Bancard::credentials()` method.
+```php
+use HDSSolutions\Bancard\Bancard;
+
+Bancard::credentials(
+    publicKey:        '...',
+    privateKey:       '...',
+    qr_commerce_code: 1234,
+    qr_branch_code:   1,
+);
+```
+
+### QR Generate
+Endpoint to request a QR Payment.
+```php
+use HDSSolutions\Bancard\Bancard;
+use HDSSolutions\Bancard\Models\QRExpress;
+
+$qrGenerateResponse = Bancard::qr_generate(
+    amount:      $amount,
+    description: 'Payment description',
+);
+
+if ( !$qrGenerateResponse->wasSuccess()) {
+    // show messages or something ...
+    $qrGenerateResponse->getMessages();
+}
+
+// access the generated QR data
+$qrExpress = $qrGenerateResponse->getQRExpress();
+echo sprintf('QR Payment ID: %s, QR Image url: %s, QR Data: %s',
+    $qrExpress->hook_alias,
+    $qrExpress->url,
+    $qrExpress->qr_data);
+
+// access the list of supported clients
+$supportedClients = $qrGenerateResponse->getSupportedClients();
+foreach ($supportedClients as $supportedClient) {
+    echo sprintf('Client name: %s, Client Logo url: %s',
+        $supportedClient->name,
+        $supportedClient->logo_url);
+}
+```
+
+### QR Revert
+Endpoint to revert a QR Payment.
+```php
+use HDSSolutions\Bancard\Bancard;
+
+$qrRevertResponse = Bancard::qr_revert(
+    hook_alias: $qrExpress->hook_alias,
 );
 ```
 
