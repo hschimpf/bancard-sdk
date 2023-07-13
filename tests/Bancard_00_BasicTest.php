@@ -8,7 +8,7 @@ use HDSSolutions\Bancard\Models\Currency;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-final class Bancard_00_BasicTests extends TestCase {
+final class Bancard_00_BasicTest extends TestCase {
 
     public function testThatWeAreOnTestingEnvironment(): void {
         $this->assertTrue(Bancard::isDevelop());
