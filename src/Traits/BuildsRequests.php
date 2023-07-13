@@ -68,8 +68,8 @@ trait BuildsRequests {
         $options = [
             RequestOptions::HEADERS => [
                 'Authorization' => sprintf('Basic %s', base64_encode(sprintf('apps/%s:%s',
-                    Bancard::getPrivateKey(),
-                    Bancard::getPublicKey(),
+                    Bancard::getQRPublicKey(),
+                    Bancard::getQRPrivateKey(),
                 ))),
             ],
         ];

@@ -19,12 +19,21 @@ final class Bancard_00_BasicTests extends TestCase {
         $dotenv->load();
 
         Bancard::credentials(
-            publicKey:        getenv('BANCARD_PUBLIC_KEY'),
-            privateKey:       getenv('BANCARD_PRIVATE_KEY'),
-            qr_commerce_code: (int) getenv('BANCARD_QR_COMMERCE_CODE'),
-            qr_branch_code:   (int) getenv('BANCARD_QR_BRANCH_CODE'),
+            publicKey:  getenv('BANCARD_PUBLIC_KEY'),
+            privateKey: getenv('BANCARD_PRIVATE_KEY'),
         );
         $this->assertSame(Bancard::getPrivateKey(), getenv('BANCARD_PRIVATE_KEY'));
+        $this->assertSame(Bancard::getPublicKey(), getenv('BANCARD_PUBLIC_KEY'));
+
+        Bancard::qr_credentials(
+            serviceUrl:     getenv('BANCARD_QR_SERVICE_URL'),
+            publicKey:      getenv('BANCARD_QR_PUBLIC_KEY'),
+            privateKey:     getenv('BANCARD_QR_PRIVATE_KEY'),
+            qrCommerceCode: (int) getenv('BANCARD_QR_COMMERCE_CODE'),
+            qrBranchCode:   (int) getenv('BANCARD_QR_BRANCH_CODE'),
+        );
+        $this->assertSame(Bancard::getQRPrivateKey(), getenv('BANCARD_QR_PRIVATE_KEY'));
+        $this->assertSame(Bancard::getQRPublicKey(), getenv('BANCARD_QR_PUBLIC_KEY'));
     }
 
     public function testInvalidDataValidations(): void {

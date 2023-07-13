@@ -256,15 +256,16 @@ $rollbackResponse = Bancard::rollback(
 - **QR Revert**
 
 ### Commerce code & Branch code
-In order to use VentasQR, you need to set your commerce code and branch code through the `Bancard::credentials()` method.
+In order to use VentasQR, you need to set your credentials through the `Bancard::qr_credentials()` method.
 ```php
 use HDSSolutions\Bancard\Bancard;
 
-Bancard::credentials(
-    publicKey:        '...',
-    privateKey:       '...',
-    qr_commerce_code: 1234,
-    qr_branch_code:   1,
+Bancard::qr_credentials(
+    serviceUrl:     'YOUR_QR_ASSIGNED_DOMAIN',
+    publicKey:      'YOUR_QR_PUBLIC_KEY',
+    privateKey:     'YOUR_QR_PRIVATE_KEY',
+    qrCommerceCode: 1234,
+    qrBranchCode:   123,
 );
 ```
 
