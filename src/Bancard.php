@@ -64,8 +64,7 @@ final class Bancard {
                : self::URI_Staging,
            'handler'  => $stack = HandlerStack::create(),
         ]);
-        // use the same client for development environment
-        $this->client_qr = self::isDevelop() ? $this->client : new Client([
+        $this->client_qr = new Client([
            'base_uri' => self::$URI_Production_QR,
            'handler'  => $stack,
         ]);

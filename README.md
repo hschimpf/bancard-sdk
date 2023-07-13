@@ -257,6 +257,8 @@ $rollbackResponse = Bancard::rollback(
 
 ### Commerce code & Branch code
 In order to use VentasQR, you need to set your credentials through the `Bancard::qr_credentials()` method.
+
+**⚠ Important: VentasQR is not scoped by `Bancard::useProduction()`, since your assigned domain will define your testing/production environment**.
 ```php
 use HDSSolutions\Bancard\Bancard;
 
