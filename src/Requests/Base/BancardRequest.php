@@ -33,9 +33,13 @@ abstract class BancardRequest implements Contracts\BancardRequest {
 
     abstract protected function buildResponse(Contracts\BancardRequest $request, Response $response): BancardResponse;
 
+    protected function through(): string {
+        return 'request';
+    }
+
     final public function execute(): bool {
         // execute this request and get result
-        $response = $this->bancard->request($this);
+        $response = $this->bancard->{$this->through()}($this);
         // store request made
         $this->request = $this->bancard->getLatestRequest();
         // parse and store response

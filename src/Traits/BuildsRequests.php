@@ -14,6 +14,7 @@ trait BuildsRequests {
     use Builders\SingleBuyRequests;
     use Builders\CardsRequests;
     use Builders\TransactionsRequests;
+    use Builders\QRRequests;
 
     /**
      * Sends the request to Bancard and returns the response
@@ -47,6 +48,40 @@ trait BuildsRequests {
         try {
             // execute request through HTTP client
             $response = $this->client->{$request->getMethod()}($endpoint, $options);
+        } catch (GuzzleException $e) {
+            // get response from exception
+            $response = $e->getResponse();
+        }
+
+        return $response;
+    }
+
+    /**
+     * Sends the request to Bancard and returns the response (QR Payments)
+     *
+     * @param  BancardRequest  $request  Request to send
+     *
+     * @return Response Response from Bancard
+     */
+    public function request_qr(BancardRequest $request): Response {
+        // build request options with the authorization request header
+        $options = [
+            RequestOptions::HEADERS => [
+                'Authorization' => sprintf('Basic %s', base64_encode(sprintf('apps/%s:%s',
+                    Bancard::getQRPublicKey(),
+                    Bancard::getQRPrivateKey(),
+                ))),
+            ],
+        ];
+
+        if ( !empty($request->getOperation())) {
+            // add operation params
+            $options[RequestOptions::JSON] = $request->getOperation();
+        }
+
+        try {
+            // execute request through HTTP client
+            $response = $this->client_qr->{$request->getMethod()}($request->getEndpoint(), $options);
         } catch (GuzzleException $e) {
             // get response from exception
             $response = $e->getResponse();
