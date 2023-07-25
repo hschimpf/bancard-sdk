@@ -2,24 +2,25 @@
 
 namespace HDSSolutions\Bancard\Responses\Structs;
 
+use HDSSolutions\Bancard\Models\Base\Model;
 use stdClass;
 
-final class BancardMessage {
+final class BancardMessage extends Model {
 
     /**
      * @var string|null Identifier of the message
      */
-    public ?string $key = null;
+    protected ?string $key = null;
 
     /**
      * @var string|null Level of severity
      */
-    public ?string $level = null;
+    protected ?string $level = null;
 
     /**
      * @var string|null Description of the message
      */
-    public ?string $description = null;
+    protected ?string $description = null;
 
     /**
      * @param  stdClass  $message
@@ -27,7 +28,7 @@ final class BancardMessage {
     public function __construct(stdClass $message) {
         $this->key = $message->key;
         $this->level = $message->level;
-        $this->description = $message->dsc;
+        $this->description = $message->dsc ?? $message->description ?? 'Unknown';
     }
 
 }

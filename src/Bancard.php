@@ -5,14 +5,15 @@ namespace HDSSolutions\Bancard;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use HDSSolutions\Bancard\Requests\Base\BancardRequest;
 use HDSSolutions\Bancard\Traits\BuildsRequests;
 use HDSSolutions\Bancard\Traits\HasServices;
+use HDSSolutions\Bancard\Traits\ManagesCredentials;
 use Psr\Http\Message\RequestInterface;
 
 final class Bancard {
-    use HasServices {
-        HasServices::init as HasServices_init;
-    }
+    use ManagesCredentials;
+    use HasServices;
     use BuildsRequests;
 
     /**
@@ -26,6 +27,11 @@ final class Bancard {
     private const URI_Production = 'https://vpos.infonet.com.py';
 
     /**
+     * Base URI for production environment (QR Payments)
+     */
+    private static string $URI_Production_QR = 'https://comercios.bancard.com.py';
+
+    /**
      * @var self Singleton instance
      */
     private static self $singleton;
@@ -36,19 +42,14 @@ final class Bancard {
     private static bool $DEV_ENV = true;
 
     /**
-     * @var string|null Public Key for communication
-     */
-    private static ?string $PUBLIC_KEY = null;
-
-    /**
-     * @var string|null Private Key for building tokens
-     */
-    private static ?string $PRIVATE_KEY = null;
-
-    /**
      * @var Client HTTP Client to Bancard services
      */
     private Client $client;
+
+    /**
+     * @var Client HTTP Client to Bancard services (QR Payments)
+     */
+    private Client $client_qr;
 
     /**
      * @var RequestInterface|null Latest request sent
@@ -56,13 +57,18 @@ final class Bancard {
     private ?RequestInterface $latest_request = null;
 
     private function __construct() {
-        // init HTTP client
+        // init HTTP clients
         $this->client = new Client([
            'base_uri' => self::isProduction()
                ? self::URI_Production
                : self::URI_Staging,
            'handler'  => $stack = HandlerStack::create(),
-       ]);
+        ]);
+        $this->client_qr = new Client([
+           'base_uri' => self::$URI_Production_QR,
+           'handler'  => $stack,
+        ]);
+
         // add a middleware to capture requests sent body
         $stack->push(Middleware::mapRequest(function(RequestInterface $request) {
             // store request made
@@ -70,30 +76,6 @@ final class Bancard {
 
             return $request;
         }));
-        // init services
-        $this->HasServices_init();
-    }
-
-    public function getLatestRequest(): ?RequestInterface {
-        return $this->latest_request;
-    }
-
-    /**
-     * Returns the registered Public Key
-     *
-     * @return string Public Key
-     */
-    public static function getPublicKey(): string {
-        return self::$PUBLIC_KEY;
-    }
-
-    /**
-     * Returns the registered Private Key
-     *
-     * @return string Private Key
-     */
-    public static function getPrivateKey(): string {
-        return self::$PRIVATE_KEY;
     }
 
     /**
@@ -104,14 +86,11 @@ final class Bancard {
     }
 
     /**
-     * Stores the credentials to use for communication with Bancard services
-     *
-     * @param  ?string  $publicKey  Public Key.
-     * @param  ?string  $privateKey  Private Key
+     * @return RequestInterface|null Latest request sent to Bancard
+     * @internal Used by {@see BancardRequest::execute()} to store the latest request sent
      */
-    public static function credentials(?string $publicKey, ?string $privateKey): void {
-        self::$PUBLIC_KEY = $publicKey;
-        self::$PRIVATE_KEY = $privateKey;
+    public function getLatestRequest(): ?RequestInterface {
+        return $this->latest_request;
     }
 
     public static function useDevelop(bool $develop = true): void {
