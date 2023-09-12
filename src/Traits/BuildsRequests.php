@@ -45,6 +45,10 @@ trait BuildsRequests {
             default => throw new RuntimeException('Unsupported request type'),
         };
 
+        if (Bancard::isDevelop()) {
+            $options[ RequestOptions::VERIFY ] = false;
+        }
+
         try {
             // execute request through HTTP client
             $response = $this->client->{$request->getMethod()}($endpoint, $options);
@@ -77,6 +81,10 @@ trait BuildsRequests {
         if ( !empty($request->getOperation())) {
             // add operation params
             $options[RequestOptions::JSON] = $request->getOperation();
+        }
+
+        if (Bancard::isDevelop()) {
+            $options[ RequestOptions::VERIFY ] = false;
         }
 
         try {
