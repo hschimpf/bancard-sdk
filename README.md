@@ -2,9 +2,10 @@
 
 Library to implement [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancard VentasQR](https://comercios.bancard.com.py/productos/ventas-qr) products.
 
-[![Latest stable version](https://img.shields.io/packagist/v/hds-solutions/bancard-sdk?style=flat-square&label=latest&color=009664)](https://github.com/hschimpf/bancard-sdk/releases/latest)
-[![License](https://img.shields.io/github/license/hschimpf/bancard-sdk?style=flat-square&color=80B2CB)](https://github.com/hschimpf/bancard-sdk/blob/main/LICENSE)
-[![Total Downloads](https://img.shields.io/packagist/dt/hds-solutions/bancard-sdk?style=flat-square&color=878787)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![Latest stable version](https://img.shields.io/packagist/v/hds-solutions/bancard-sdk?style=flat-square&label=latest&color=0092CB)](https://github.com/hschimpf/bancard-sdk/releases/latest)
+[![License](https://img.shields.io/github/license/hschimpf/bancard-sdk?style=flat-square&color=009664)](https://github.com/hschimpf/bancard-sdk/blob/main/LICENSE)
+[![Total Downloads](https://img.shields.io/packagist/dt/hds-solutions/bancard-sdk?style=flat-square&color=747474)](https://packagist.org/packages/hds-solutions/bancard-sdk)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/hds-solutions/bancard-sdk?style=flat-square&color=747474&label)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 [![Required PHP version](https://img.shields.io/packagist/dependency-v/hds-solutions/bancard-sdk/php?style=flat-square&color=006496&logo=php&logoColor=white)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
 ## Installation
