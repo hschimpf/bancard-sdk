@@ -11,6 +11,15 @@ use HDSSolutions\Bancard\Traits\HasServices;
 use HDSSolutions\Bancard\Traits\ManagesCredentials;
 use Psr\Http\Message\RequestInterface;
 
+/**
+ * Bancard SDK main class for handling payments and transactions
+ *
+ * This class provides the main interface for interacting with Bancard's payment services.
+ * It handles both standard card payments and QR-based transactions, managing the communication
+ * with Bancard's API endpoints in both staging and production environments.
+ *
+ * @final
+ */
 final class Bancard {
     use ManagesCredentials;
     use HasServices;
@@ -70,7 +79,7 @@ final class Bancard {
         ]);
 
         // add a middleware to capture requests sent body
-        $stack->push(Middleware::mapRequest(function(RequestInterface $request) {
+        $stack->push(Middleware::mapRequest(function (RequestInterface $request) {
             // store request made
             $this->latest_request = $request;
 

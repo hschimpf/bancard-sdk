@@ -10,6 +10,18 @@ use HDSSolutions\Bancard\Builders;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 use RuntimeException;
 
+/**
+ * Trait for building and executing HTTP requests to Bancard's API
+ *
+ * This trait provides the core functionality for constructing and sending HTTP requests
+ * to Bancard's payment processing endpoints. It handles both standard payment API calls
+ * and QR-based payment requests.
+ *
+ * @uses \HDSSolutions\Bancard\Builders\SingleBuyRequests
+ * @uses \HDSSolutions\Bancard\Builders\CardsRequests
+ * @uses \HDSSolutions\Bancard\Builders\TransactionsRequests
+ * @uses \HDSSolutions\Bancard\Builders\QRRequests
+ */
 trait BuildsRequests {
     use Builders\SingleBuyRequests;
     use Builders\CardsRequests;
@@ -34,7 +46,7 @@ trait BuildsRequests {
                     // set public key
                     'public_key' => Bancard::getPublicKey(),
                     // get operation params
-                    'operation' => array_merge(
+                    'operation'  => array_merge(
                         // add token for the operation
                         [ 'token' => Builders\TokenBuilder::for($request) ],
                         // add request operation info
@@ -42,6 +54,7 @@ trait BuildsRequests {
                     ),
                 ],
             ],
+
             default => throw new RuntimeException('Unsupported request type'),
         };
 
@@ -80,7 +93,7 @@ trait BuildsRequests {
 
         if ( !empty($request->getOperation())) {
             // add operation params
-            $options[RequestOptions::JSON] = $request->getOperation();
+            $options[ RequestOptions::JSON ] = $request->getOperation();
         }
 
         if (Bancard::isDevelop()) {
