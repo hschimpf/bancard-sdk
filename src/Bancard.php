@@ -102,18 +102,43 @@ final class Bancard {
         return $this->latest_request;
     }
 
+    /**
+     * Enables or disables the use of the development environment.
+     *
+     * When development mode is enabled, the SDK will use the staging environment
+     * for all requests. This can be useful for testing and development purposes.
+     *
+     * @param  bool  $develop  Whether to enable or disable the development environment.
+     *                          Defaults to `true`.
+     */
     public static function useDevelop(bool $develop = true): void {
         self::$DEV_ENV = $develop;
     }
 
+    /**
+     * Enables or disables the use of the production environment.
+     *
+     * When production mode is enabled, the SDK will use the production environment
+     * for all requests. This can be useful in production environments where you
+     * want to use the live Bancard API.
+     *
+     * @param  bool  $production  Whether to enable or disable the production environment.
+     *                             Defaults to `true`.
+     */
     public static function useProduction(bool $production = true): void {
         self::$DEV_ENV = !$production;
     }
 
+    /**
+     * @return bool Whether the development environment is currently enabled
+     */
     public static function isDevelop(): bool {
         return self::$DEV_ENV;
     }
 
+    /**
+     * @return bool Whether the production environment is currently enabled
+     */
     public static function isProduction(): bool {
         return !self::$DEV_ENV;
     }

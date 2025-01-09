@@ -4,6 +4,11 @@ namespace HDSSolutions\Bancard\Responses;
 
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a new card registration request.
+ * This class encapsulates the details of the response, including the process ID
+ * associated with the card registration operation.
+ */
 final class CardsNewResponse extends Base\BancardResponse implements Contracts\CardsNewResponse {
 
     private function __construct(

@@ -5,6 +5,11 @@ namespace HDSSolutions\Bancard\Responses;
 use HDSSolutions\Bancard\Models\Confirmation;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a charge request to Bancard's payment system.
+ * This class encapsulates the details of the response, including any confirmation
+ * information related to the transaction.
+ */
 final class ChargeResponse extends Base\BancardResponse implements Contracts\ChargeResponse {
 
     public function __construct(

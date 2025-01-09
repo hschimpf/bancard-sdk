@@ -10,6 +10,11 @@ use HDSSolutions\Bancard\Responses\Structs\BancardMessage;
 use JsonException;
 use Psr\Http\Message\StreamInterface;
 
+/**
+ * Base response class for all Bancard API responses.
+ * Provides common functionality for handling response data, status codes,
+ * process status, and messages from Bancard's payment system.
+ */
 abstract class BancardResponse implements Contracts\BancardResponse {
 
     public function __construct(
@@ -17,17 +22,19 @@ abstract class BancardResponse implements Contracts\BancardResponse {
     ) {}
 
     /**
-     * @var Response Guzzle original response
+     * Original Guzzle response from the API call
      */
     private Response $response;
 
     /**
-     * @var string Bancard process status result
+     * Status of the Bancard process
      */
     private string $process_status;
 
     /**
-     * @var BancardMessage[] Messages from Bancard
+     * Messages returned by Bancard's API
+     *
+     * @var BancardMessage[]
      */
     private array $messages = [];
 

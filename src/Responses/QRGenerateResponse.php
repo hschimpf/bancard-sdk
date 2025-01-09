@@ -6,6 +6,11 @@ use HDSSolutions\Bancard\Models\QRExpress;
 use HDSSolutions\Bancard\Models\SupportedClient;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a QR code generation request.
+ * This class encapsulates the details of the response, including the generated QR code
+ * information and supported clients for the QR payment system.
+ */
 final class QRGenerateResponse extends Base\BancardResponse implements Contracts\QRGenerateResponse {
 
     public function __construct(

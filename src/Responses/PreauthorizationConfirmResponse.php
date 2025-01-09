@@ -5,6 +5,11 @@ namespace HDSSolutions\Bancard\Responses;
 use HDSSolutions\Bancard\Models\Confirmation;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a pre-authorization confirmation request.
+ * This class encapsulates the details of the response, including any confirmation
+ * information related to the pre-authorization.
+ */
 final class PreauthorizationConfirmResponse extends Base\BancardResponse implements Contracts\PreauthorizationConfirmResponse {
 
     public function __construct(

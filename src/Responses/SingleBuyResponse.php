@@ -4,6 +4,11 @@ namespace HDSSolutions\Bancard\Responses;
 
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a single buy transaction request.
+ * This class encapsulates the details of the response, including the process ID
+ * associated with the single buy operation.
+ */
 final class SingleBuyResponse extends Base\BancardResponse implements Contracts\SingleBuyResponse {
 
     private function __construct(

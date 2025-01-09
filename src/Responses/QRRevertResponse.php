@@ -5,6 +5,11 @@ namespace HDSSolutions\Bancard\Responses;
 use HDSSolutions\Bancard\Models\Reverse;
 use HDSSolutions\Bancard\Requests\Contracts\BancardRequest;
 
+/**
+ * Represents the response returned after a QR code payment reversion request.
+ * This class encapsulates the details of the response, including any reverse
+ * information related to the QR payment transaction.
+ */
 final class QRRevertResponse extends Base\BancardResponse implements Contracts\QRRevertResponse {
 
     public function __construct(
