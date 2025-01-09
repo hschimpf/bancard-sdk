@@ -2,7 +2,7 @@
     "name": "hds-solutions/bancard-sdk",
     "description": "Bancard SDK library",
     "type": "library",
-    "license": "GPL-3.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "Hermann D. Schimpf",

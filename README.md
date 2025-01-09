@@ -1,6 +1,6 @@
 # Bancard SDK
 
-Library to implement [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancard VentasQR](https://comercios.bancard.com.py/productos/ventas-qr) products.
+A comprehensive PHP SDK for integrating [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancard VentasQR](https://comercios.bancard.com.py/productos/ventas-qr) payment solutions into your applications.
 
 [![Latest stable version](https://img.shields.io/packagist/v/hds-solutions/bancard-sdk?style=flat-square&label=latest&color=0092CB)](https://github.com/hschimpf/bancard-sdk/releases/latest)
 [![License](https://img.shields.io/github/license/hschimpf/bancard-sdk?style=flat-square&color=009664)](https://github.com/hschimpf/bancard-sdk/blob/main/LICENSE)
@@ -8,108 +8,99 @@ Library to implement [Bancard vPOS](https://www.bancard.com.py/vpos) and [Bancar
 [![Monthly Downloads](https://img.shields.io/packagist/dm/hds-solutions/bancard-sdk?style=flat-square&color=747474&label)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 [![Required PHP version](https://img.shields.io/packagist/dependency-v/hds-solutions/bancard-sdk/php?style=flat-square&color=006496&logo=php&logoColor=white)](https://packagist.org/packages/hds-solutions/bancard-sdk)
 
+## Table of Contents
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [vPOS Integration](#vpos-integration)
+  - [Features](#vpos-features)
+  - [Usage Examples](#vpos-usage-examples)
+  - [Error Handling](#error-handling)
+- [VentasQR Integration](#ventasqr-integration)
+  - [Features](#ventasqr-features)
+  - [Usage Examples](#ventasqr-usage-examples)
+- [Advanced Usage](#advanced-usage)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Installation
-### Dependencies
+
+### Requirements
 - PHP >= 8.0
 
-### Through composer
+### Via composer
 ```bash
 composer require hds-solutions/bancard-sdk
 ```
 
-## Usage
-To set your Bancard credentials, use the `Bancard::credentials()` method.
+## Configuration
+
+### Setting up Credentials
+
 ```php
 use HDSSolutions\Bancard\Bancard;
 
+// Set your vPOS API credentials
 Bancard::credentials(
     publicKey:  'YOUR_PUBLIC_KEY',
     privateKey: 'YOUR_PRIVATE_KEY',
 );
 ```
 
-The library by defaults uses the `staging` environment. To change to `production` environment use the `Bancard::useProduction()` method.
-```php
-Bancard::useProduction();
-```
+### Environment Configuration
 
-This method also can receive a boolean parameter. For example, in Laravel you can dynamically match your environment
-```php
-Bancard::useProduction(config('app.env') === 'production');
-```
+The SDK uses the staging environment by default for vPOS. Switch to production when ready:
 
-## Request and Response objects features
-The request and the response objects have some helper methods:
 ```php
 use HDSSolutions\Bancard\Bancard;
 
-$response = Bancard::single_buy(...);
+// Switch to production
+Bancard::useProduction();
 
-// this method returns true only if status == 'success'
-if ( !$response->wasSuccess()) {
-    // you can access the messages array received from Bancard
-    foreach($response->getMessages() as $bancardMessage) {
-        echo sprintf('Error: %s, Level: %s => %s',
-            $bancardMessage->key,
-            $bancardMessage->level,
-            $bancardMessage->description);
-    }
-}
-
-// this method returns the HTTP status code of the response
-if ($response->getStatusCode() === 201) {
-    // ...
-}
-
-// also, you can to access the raw body received
-print_r($response->getBody()->getContents());
-
-// you can access to the original request made
-$request = $response->getRequest();
-// and vice versa
-$response = $request->getResponse();
-
-// on the request object you also have access to the raw body sent
-print_r($request->getBody()->getContents());
+// Or dynamically based on your application environment
+Bancard::useProduction(config('app.env') === 'production');
 ```
 
-## vPOS
-- **Single Buy**
-- **Single Buy Zimple**
-- **Cards New**
-- **User Cards**
-- **Card Delete**
-- **Charge**
-- **Confirmation**
-- **Preauthorization Confirm**
-- **Rollback**
+## vPOS Integration
 
-### SingleBuy
-Endpoint used to generate a process ID to call the Bancard `<iframe>` for an one-time payment.
+### vPOS Features
+- Single payments
+- Single payments through Zimple
+- Card management
+- Charge payments to registered cards
+- Pre-authorization
+- Transaction management _(get confirmation and rollback payments)_
+
+### vPOS Usage Examples
+
+#### Single Payment Flow
+
+Endpoint used to generate a process ID to call the Bancard `<iframe>` for a one-time payment.
+
 ```php
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Currency;
 
-$singleBuyResponse = Bancard::single_buy(
+$response = Bancard::single_buy(
     shop_process_id: $shop_process_id,
     amount:          $amount,
-    description:     'Payment description',
+    description:     'Premium Subscription',
     currency:        Currency::Guarani,
-    return_url:      'https://localhost/your-success-callback-path',
-    cancel_url:      'https://localhost/your-cancelled-callback-path',
+    return_url:      'https://your-domain.com/payment/success',
+    cancel_url:      'https://your-domain.com/payment/cancel',
 );
 
-if ( !$singleBuyResponse->wasSuccess()) {
-    // show messages or something ... 
-    $singleBuyResponse->getMessages();
+if ($singleBuyResponse->wasSuccess()) {
+    // access the generated process ID to call the Bancard <iframe>
+    $process_id = $singleBuyResponse->getProcessId();
 }
 
-// access the generated process ID to call the Bancard <iframe>
-$process_id = $singleBuyResponse->getProcessId();
 ```
 
-### SingleBuy Zimple
+#### Single Payment Flow through Zimple
+
 Same as above, but for `Zimple` payments.
+
 ```php
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Currency;
@@ -117,122 +108,87 @@ use HDSSolutions\Bancard\Models\Currency;
 $singleBuyResponse = Bancard::single_buy_zimple(
     shop_process_id: $shop_process_id,
     amount:          $amount,
-    description:     'Payment description',
+    description:     'Premium Subscription',
     currency:        Currency::Guarani,
-    phone_no:        $phone_no, // this field is automatically send on the additional_data property of the request
+    phone_no:        $phone_no, // this field is automatically send on the `additional_data` property of the request
     return_url:      'https://localhost/your-success-callback-path',
     cancel_url:      'https://localhost/your-cancelled-callback-path',
 );
 ```
 
-### Customizable requests
-If you need, you can create a pending request and change the values on runtime. This applies to all available requests.
-```php
-use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\Currency;
+#### Card Management
 
-$singleBuyRequest = Bancard::newSingleBuyRequest(
-    shop_process_id: $shop_process_id,
-    amount:          $amount,
-    description:     'Payment description',
-    currency:        Currency::Guarani,
-    return_url:      'https://localhost/your-success-callback-path',
-    cancel_url:      'https://localhost/your-cancelled-callback-path',
-);
-// for example, enable Zimple flag for this request
-$singleBuyRequest->enableZimple();
-// for Zimple, you need to specify the user's phone number on the additional data property
-$singleBuyRequest->setAdditionalData($phone_no);
-
-// after building the request, you can call the execute() method to send the request to Bancard
-if ( !$singleBuyRequest->execute()) {
-    // if failed, you can access the response, and messages, ...
-    $singleBuyRequest->getResponse()->getMessages();
-}
-```
-
-### CardsNew
-Endpoint used to generate a process ID to call the Bancard `<iframe>` for card registry.
+1. **Register a New Card**
 ```php
 use HDSSolutions\Bancard\Bancard;
 
-$cardsNewResponse = Bancard::card_new(
+$response = Bancard::card_new(
     user_id:    $user_id,
     card_id:    $card_id,
-    phone_no:   $user_phone,
-    email:      $user_email,
-    return_url: 'https://localhost/your-callback-path',
+    phone_no:   '+595991234567',
+    email:      'user@example.com',
+    return_url: 'https://your-domain.com/cards/callback',
 );
 
-// access the generated process ID to call the Bancard <iframe>
-$cardsNewResponse->getProcessId();
-```
-
-### UsersCards
-Endpoint used to get the registered user cards.
-```php
-use HDSSolutions\Bancard\Bancard;
-
-$usersCardsResponse = Bancard::users_cards(
-    user_id: $user_id,
-));
-
-// access the user cards
-foreach ($usersCardsResponse->getCards() as $card) {
-    echo sprintf('Brand: %s, Number: %s, Type: %s, Expiration Date: %s',
-        $card->card_brand,
-        $card->card_masked_number,
-        $card->card_type,
-        $card->expiration_date);
+if ($response->wasSuccess()) {
+    // access the generated process ID to call the Bancard <iframe>
+    $processId = $response->getProcessId();
 }
 ```
 
-### CardDelete
-Endpoint to remove a registered card. You need an instance of `Card` model obtained from previous request.
+2. **List User's Cards**
 ```php
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Card;
 
-$cardDeleteResponse = Bancard::card_delete(
-    card: $card,
+$response = Bancard::users_cards(
+    user_id: $user_id,
 );
+
+if ($response->wasSuccess()) {
+    foreach ($response->getCards() as $card) {
+        echo "Card: {$card->card_masked_number}\n";
+        echo "Brand: {$card->card_brand}\n";
+        echo "Expiration: {$card->expiration_date}\n";
+    }
+}
 ```
 
-### Charge
-Endpoint used to make a payment using a registered user card. You need an instance of `Card` model obtained from `Bancard::users_cards()`.
+3. **Charge a Registered Card**
 ```php
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Card;
+use HDSSolutions\Bancard\Models\Currency;
 use HDSSolutions\Bancard\Models\Confirmation;
+use HDSSolutions\Bancard\Models\SecurityInformation;
 
-$chargeResponse = Bancard::charge(
+$response = Bancard::charge(
     card:            $card,
     shop_process_id: $shop_process_id,
     amount:          $amount,
     currency:        Currency::Guarani,
-    description:     'Charge payment description',
-));
+    description:     'Monthly Subscription',
+);
 
-if ( !$chargeResponse->wasSuccess()) {
-    // show messages or something ... 
-    $chargeResponse->getMessages();
+if ($response->wasSuccess()) {
+    // access to change Confirmation data
+    $confirmation = $chargeResponse->getConfirmation();
+    echo sprintf('Ticket No: %u, Authorization ID: %u',
+        $confirmation->ticket_number,
+        $confirmation->authorization_number);
+    
+    // also access to the security information data
+    $securityInformation = $confirmation->getSecurityInformation();
+    echo sprintf('Country: %s, Risk Index: %.2F',
+        $securityInformation->card_country,
+        $securityInformation->risk_index);
 }
-
-// access to change Confirmation data
-$confirmation = $chargeResponse->getConfirmation();
-echo sprintf('Ticket No: %u, Authorization ID: %u',
-    $confirmation->ticket_number,
-    $confirmation->authorization_number);
-
-// also access to the security information data
-$securityInformation = $confirmation->getSecurityInformation();
-echo sprintf('Country: %s, Risk Index: %.2F',
-    $securityInformation->card_country,
-    $securityInformation->risk_index);
 ```
 
-### Confirmation
+4. **Get the confirmation of a Payment**
+
 Endpoint to get the confirmation of a payment. Example, in case the above charge request stayed as a pending of confirmation payment.
+
 ```php
 use HDSSolutions\Bancard\Bancard;
 use HDSSolutions\Bancard\Models\Confirmation;
@@ -242,8 +198,7 @@ $confirmationResponse = Bancard::confirmation(
 );
 ```
 
-### Rollback
-Endpoint to rollback a payment.
+5. **Rollback a Payment**
 ```php
 use HDSSolutions\Bancard\Bancard;
 
@@ -252,14 +207,83 @@ $rollbackResponse = Bancard::rollback(
 );
 ```
 
-## VentasQR
-- **QR Generate**
-- **QR Revert**
+6. **Remove a Registered Card**
 
-### Commerce code & Branch code
-In order to use VentasQR, you need to set your credentials through the `Bancard::qr_credentials()` method.
+```php
+use HDSSolutions\Bancard\Bancard;
+use HDSSolutions\Bancard\Models\Card;
 
-**⚠ Important: VentasQR is not scoped by `Bancard::useProduction()`, since your assigned domain will define your testing/production environment**.
+$response = Bancard::card_delete(
+    card: $card,  // must be an instance of Card, obtained from Bancard::users_cards()
+);
+```
+
+### Error Handling
+
+The SDK provides comprehensive error handling for various scenarios:
+
+#### 1. Basic Error Handling
+```php
+$response = Bancard::single_buy(/* ... */);
+
+if (! $response->wasSuccess()) {
+    foreach ($response->getMessages() as $message) {
+        echo sprintf(
+            "Error: [%s] %s (Level: %s)\n",
+            $message->key,
+            $message->description,
+            $message->level
+        );
+    }
+}
+```
+
+#### 2. Transaction Response Handling
+```php
+$response = Bancard::charge(/* ... */);
+
+if ($response->wasSuccess()) {
+    $confirmation = $response->getConfirmation();
+    
+    // Access confirmation details
+    echo "Response: {$confirmation->response}\n";
+    echo "Response Details: {$confirmation->response_details}\n";
+    echo "Response Description: {$confirmation->response_description}\n";
+    
+    // Access security information
+    $security = $confirmation->getSecurityInformation();
+    echo "Customer IP: {$security->customer_ip}\n";
+    echo "Card Country: {$security->card_country}\n";
+    echo "Risk Index: {$security->risk_index}\n";
+}
+```
+
+#### 3. Debug Information
+```php
+if (! $response->wasSuccess()) {
+    // Get request details
+    $request = $response->getRequest();
+    echo "Request Body: {$request->getBody()->getContents()}\n";
+    
+    // Get response details
+    echo "Response Status: {$response->getStatusCode()}\n";
+    echo "Response Body: {$response->getBody()->getContents()}\n";
+    
+    // Log for debugging
+    error_log(sprintf(
+        "Bancard API Error: %s, Status: %d, Body: %s",
+        $response->getMessages()[0]->description ?? 'Unknown error',
+        $response->getStatusCode(),
+        $response->getBody()->getContents()
+    ));
+}
+```
+
+## VentasQR Integration
+
+### VentasQR Credentials
+⚠ **Important**: VentasQR is not scoped by `Bancard::useProduction()`, since your assigned domain will define your testing/production environment.
+
 ```php
 use HDSSolutions\Bancard\Bancard;
 
@@ -272,57 +296,100 @@ Bancard::qr_credentials(
 );
 ```
 
-### QR Generate
-Endpoint to request a QR Payment.
-```php
-use HDSSolutions\Bancard\Bancard;
-use HDSSolutions\Bancard\Models\QRExpress;
+### VentasQR Features
+- Generate QR codes for payments
+- Revert QR payments
 
-$qrGenerateResponse = Bancard::qr_generate(
+### VentasQR Usage Examples
+
+1. **Generate QR Code**
+```php
+$response = Bancard::qr_generate(
     amount:      $amount,
-    description: 'Payment description',
+    description: 'Product Purchase',
 );
 
-if ( !$qrGenerateResponse->wasSuccess()) {
-    // show messages or something ...
-    $qrGenerateResponse->getMessages();
-}
-
-// access the generated QR data
-$qrExpress = $qrGenerateResponse->getQRExpress();
-echo sprintf('QR Payment ID: %s, QR Image url: %s, QR Data: %s',
-    $qrExpress->hook_alias,
-    $qrExpress->url,
-    $qrExpress->qr_data);
-
-// access the list of supported clients
-$supportedClients = $qrGenerateResponse->getSupportedClients();
-foreach ($supportedClients as $supportedClient) {
-    echo sprintf('Client name: %s, Client Logo url: %s',
-        $supportedClient->name,
-        $supportedClient->logo_url);
+if ($response->wasSuccess()) {
+    // access the generated QR data
+    $qrExpress = $qrGenerateResponse->getQRExpress();
+    echo sprintf('QR Payment ID: %s, QR Image url: %s, QR Data: %s',
+        $qrExpress->hook_alias,
+        $qrExpress->url,
+        $qrExpress->qr_data);
+    
+    // access the list of supported clients
+    $supportedClients = $qrGenerateResponse->getSupportedClients();
+    foreach ($supportedClients as $supportedClient) {
+        echo sprintf('Client name: %s, Client Logo url: %s',
+            $supportedClient->name,
+            $supportedClient->logo_url);
+    }
 }
 ```
 
-### QR Revert
-Endpoint to revert a QR Payment.
+2. **Revert QR Payment**
 ```php
-use HDSSolutions\Bancard\Bancard;
-
-$qrRevertResponse = Bancard::qr_revert(
+$response = Bancard::qr_revert(
     hook_alias: $qrExpress->hook_alias,
 );
+
+if ($response->wasSuccess()) {
+    echo "Payment successfully reverted\n";
+}
 ```
 
-# Security Vulnerabilities
-If you encounter any security-related issues, please feel free to raise a ticket on the issue tracker.
+## Advanced Usage
 
-# Contributing
+### Request/Response Inspection
+
+Access request and response details for debugging:
+
+```php
+// From response to request
+$request = $response->getRequest();
+echo "Request Body: " . $request->getBody()->getContents() . "\n";
+
+// From request to response
+$response = $request->getResponse();
+echo "Response Body: " . $response->getBody()->getContents() . "\n";
+```
+
+## API Reference
+
+### vPOS Methods
+- `Bancard::single_buy()` - Process a one-time payment
+- `Bancard::single_buy_zimple()` - Process a Zimple payment
+- `Bancard::card_new()` - Register a new card
+- `Bancard::users_cards()` - List user's registered cards
+- `Bancard::card_delete()` - Remove a registered card
+- `Bancard::charge()` - Charge a registered card
+- `Bancard::confirmation()` - Check payment status
+- `Bancard::preauthorizationConfirm()` - Confirm a pre-authorized payment
+- `Bancard::rollback()` - Cancel a pending transaction
+
+### VentasQR Methods
+- `Bancard::qr_generate()` - Generate a QR code for payment
+- `Bancard::qr_revert()` - Cancel a QR payment
+
+### Currency Support
+
+The SDK supports multiple currencies through the `Currency` class:
+- `Currency::Guarani` - Paraguayan Guarani (PYG)
+- `Currency::Dollar` - US Dollar (USD)
+
+For detailed API documentation, visit:
+- [Bancard vPOS Documentation](https://www.bancard.com.py/vpos)
+- [Bancard VentasQR Documentation](https://comercios.bancard.com.py/productos/ventas-qr)
+
+## Contributing
 Contributions are welcome! If you find any issues or would like to add new features or improvements, please feel free to submit a pull request.
 
-## Contributors
-- [Hermann D. Schimpf](https://hds-solutions.net)
+### Contributors
+- [Hermann D. Schimpf](https://github.com/hschimpf)
 
-# Licence
-This library is open-source software licensed under the [GPL-3.0 License](LICENSE).
+### Security Vulnerabilities
+If you encounter any security-related issues, please feel free to raise a ticket on the issue tracker.
+
+## License
+This library is open-source software licensed under the [MIT License](LICENSE).
 Please see the [License File](LICENSE) for more information.
