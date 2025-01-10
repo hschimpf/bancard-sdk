@@ -354,6 +354,32 @@ $response = $request->getResponse();
 echo "Response Body: " . $response->getBody()->getContents() . "\n";
 ```
 
+### Customizable requests
+If you need, you can create a pending request and change the values on runtime. This applies to all available requests.
+```php
+use HDSSolutions\Bancard\Bancard;
+use HDSSolutions\Bancard\Models\Currency;
+
+$singleBuyRequest = Bancard::newSingleBuyRequest(
+    shop_process_id: $shop_process_id,
+    amount:          $amount,
+    description:     'Premium Subscription',
+    currency:        Currency::Guarani,
+    return_url:      'https://your-domain.com/payment/success-callback-path',
+    cancel_url:      'https://your-domain.com/payment/cancel-callback-path',
+);
+// for example, enable Zimple flag for this request
+$singleBuyRequest->enableZimple();
+// for Zimple, you need to specify the user's phone number on the additional data property
+$singleBuyRequest->setAdditionalData($phone_no);
+
+// after building the request, you can call the execute() method to send the request to Bancard
+if (! $singleBuyRequest->execute()) {
+    // if failed, you can access the response, and the messages
+    $singleBuyRequest->getResponse()->getMessages();
+}
+```
+
 ## API Reference
 
 ### vPOS Methods
